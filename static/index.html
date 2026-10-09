@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KOIP | Strateji Rəqəmsal Şəbəkə Platforması</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary: #6D28D9;
+      --primary-hover: #5B21B6;
+      --primary-light: #F5F3FF;
+      --primary-border: #DDD6FE;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #F5F3FF;
+      color: #0F172A;
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #DDD6FE;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="flex h-screen overflow-hidden bg-[#F5F3FF] text-slate-900">
+
+  <!-- ================= SOL TASKBAR (SIDEBAR) ================= -->
+  <aside class="w-64 bg-[#F5F3FF] border-r border-[#DDD6FE]/80 flex flex-col justify-between shrink-0 select-none shadow-[1px_0_4px_rgba(109,40,217,0.03)]">
+    <div>
+      <!-- Brend Başlığı: Təmiz, klassik düz KOIP mətni -->
+      <div class="h-16 px-6 border-b border-[#DDD6FE]/60 flex items-center justify-between">
+        <span class="text-xl font-extrabold tracking-tight text-slate-900">KOIP</span>
+        <span class="text-[11px] font-semibold text-[#6D28D9] tracking-wider uppercase">Enterprise</span>
+      </div>
+
+      <!-- Naviqasiya Səhifələri -->
+      <nav class="p-3 space-y-1">
+        <div class="px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+          Modullar
+        </div>
+
+        <!-- 1. Qarabağ Strateji Qovşaqları (Yaşıl Şəbəkə Ops) -->
+        <button onclick="switchTab('karabakh-tab')" id="nav-karabakh-tab" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-white bg-[#6D28D9] shadow-sm transition">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>Qarabağ Strateji Qovşaqları</span>
+        </button>
+
+        <!-- 2. Müştəri Riski & Lumi (2-ci SIRA) -->
+        <button onclick="switchTab('churn-tab')" id="nav-churn-tab" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <span>Müştəri Riski & Lumi</span>
+        </button>
+
+        <!-- 3. AegisAgent Denetçisi -->
+        <button onclick="switchTab('aegis-tab')" id="nav-aegis-tab" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+          <span>AegisAgent (Çoxlu Ajan)</span>
+        </button>
+
+        <!-- 4. Açıqlama (4-cü SIRA) -->
+        <button onclick="switchTab('mentor-tab')" id="nav-mentor-tab" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+          <span>Açıqlama</span>
+        </button>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- ================= ƏSAS SAHƏ ================= -->
+  <main class="flex-1 flex flex-col bg-[#F5F3FF] overflow-hidden">
+
+    <!-- Üst Başlıq Zolağı -->
+    <header class="h-16 px-8 border-b border-[#DDD6FE]/80 bg-[#F5F3FF] flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-3">
+        <span class="text-sm font-extrabold text-slate-900 tracking-tight">KOIP</span>
+        <span class="text-xs text-slate-300">/</span>
+        <h1 id="pageTitle" class="text-xs font-bold text-slate-900">Qarabağ & Şərqi Zəngəzur Strateji Şəbəkə Mərkəzi</h1>
+        <span class="text-xs text-slate-300">/</span>
+        <span id="pageSubtitle" class="text-xs text-slate-500 font-medium">B2B Sənaye və Yaşıl Baza Stansiyaları</span>
+      </div>
+
+    </header>
+
+    <!-- ======================================================== -->
+    <!-- SƏHİFƏ 1: QARABAĞ STRATEJİ ŞƏBƏKƏ MƏRKƏZİ (1-Cİ SIRA)   -->
+    <!-- ======================================================== -->
+    <div id="tab-karabakh" class="tab-page flex-1 overflow-y-auto custom-scrollbar p-8 space-y-6">
+
+      <!-- Əsas Göstəricilər Banneri -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white border border-slate-200/80 rounded-xl p-4 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Aktiv Yaşıl Qovşaqlar</div>
+          <div class="text-2xl font-bold text-slate-900 mt-1">38 Baza Stansiyası</div>
+          <div class="text-[11px] text-slate-500 mt-1">Günəş enerjisi & peyk dəstəyi</div>
+        </div>
+
+        <div class="bg-white border border-slate-200/80 rounded-xl p-4 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">B2B Sənaye Obyektləri</div>
+          <div class="text-2xl font-bold text-[#6D28D9] mt-1">14 İri Müəssisə</div>
+          <div class="text-[11px] text-[#6D28D9] font-medium mt-1">Ağdam, Şuşa, Laçın, Zəngilan</div>
+        </div>
+
+        <!-- YALNIZ BURADA YAŞIL KÂR RƏNGİ -->
+        <div class="bg-white border border-slate-200/80 rounded-xl p-4 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Sahə Logistika Kârı</div>
+          <div class="text-2xl font-bold text-emerald-600 mt-1">+24,800 ₼</div>
+          <div class="text-[11px] text-emerald-600 font-medium mt-1">Qorunan ezamiyyə & briqada kârı</div>
+        </div>
+
+        <div class="bg-white border border-slate-200/80 rounded-xl p-4 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Şəbəkə Uptime Zəmanəti</div>
+          <div class="text-2xl font-bold text-slate-800 mt-1">99.96%</div>
+          <div class="text-[11px] text-slate-500 mt-1">Sıfır kəsinti protokolu</div>
+        </div>
+      </div>
+
+      <!-- Mentor / Jüri üçün Sürətli İzah Paneli (3 Addımlıq Model) -->
+      <div class="bg-white border border-[#DDD6FE] rounded-xl p-3.5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs shadow-sm">
+        <div class="flex items-center gap-3">
+          <span class="w-6 h-6 rounded-md bg-[#6D28D9] text-white flex items-center justify-center font-bold text-[11px]">1</span>
+          <div>
+            <div class="font-bold text-slate-900">Çətin Relyef Riski</div>
+            <div class="text-slate-500 text-[11px]">Tikinti və dağlıq hava səbəbilə optik zədələnmə</div>
+          </div>
+        </div>
+        <span class="hidden md:inline text-slate-300 font-bold">➔</span>
+        <div class="flex items-center gap-3">
+          <span class="w-6 h-6 rounded-md bg-[#6D28D9] text-white flex items-center justify-center font-bold text-[11px]">2</span>
+          <div>
+            <div class="font-bold text-slate-900">0.0 ms Avtonom Re-routing</div>
+            <div class="text-[#6D28D9] font-medium text-[11px]">İnsan gözləmədən mikrodalğa/peyk ehtiyat dəhlizinə keçid</div>
+          </div>
+        </div>
+        <span class="hidden md:inline text-slate-300 font-bold">➔</span>
+        <div class="flex items-center gap-3">
+          <span class="w-6 h-6 rounded-md bg-emerald-600 text-white flex items-center justify-center font-bold text-[11px]">3</span>
+          <div>
+            <div class="font-bold text-slate-900">Birbaşa Sahə Kârı</div>
+            <div class="text-emerald-600 font-semibold text-[11px]">Briqada ezamiyyəsi 0 ₼ • Aylıq +24,800 ₼ kâr qorunması</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Canlı Qarabağ Şəbəkə Topologiyası & Qəza Simulyatoru -->
+      <div class="bg-white border border-[#DDD6FE] rounded-xl p-5 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#6D28D9] animate-pulse"></span>
+              <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider">Qarabağ & Şərqi Zəngəzur Canlı Şəbəkə Topologiyası</h3>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-0.5">Optik magistral halqası, avtonom peyk re-routing koridorları və real-vaxt telemetriya</p>
+          </div>
+
+          <!-- Qəza Simulyasiyası Düyməsi -->
+          <div class="flex items-center gap-2">
+            <button id="btnSimulateFault" onclick="triggerNetworkFaultSimulation()" class="px-3.5 py-1.5 rounded-lg border border-[#7C3AED] bg-[#FAF5FF] hover:bg-[#6D28D9] hover:text-white text-[#6D28D9] font-bold text-xs transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+              <span id="faultSimIcon">⚡</span>
+              <span id="faultSimBtnText">Optik Kabel Qəzası Simulyasiya Et</span>
+            </button>
+            <div id="simStatusPill" class="text-[11px] font-semibold text-[#6D28D9] bg-[#F5F3FF] px-2.5 py-1 rounded-md border border-[#DDD6FE]">
+              Stabil Şəbəkə
+            </div>
+          </div>
+        </div>
+
+        <!-- SVG Topologiya Xəritəsi -->
+        <div class="relative w-full bg-[#FAF5FF]/50 border border-slate-200/80 rounded-xl p-3 overflow-x-auto">
+          <svg viewBox="0 0 760 135" class="w-full min-w-[650px] h-32 select-none" id="topologySvg">
+            <!-- Peyk / Ehtiyat koridoru (Yuxarı qövs) -->
+            <path id="topoBackupLine" d="M 80 75 Q 380 -10 680 75" fill="none" stroke="#C4B5FD" stroke-width="2.5" stroke-dasharray="6,4" class="transition-all duration-500" />
+            
+            <!-- Peyk Mərkəzi -->
+            <g id="satGroup" transform="translate(365, 8)">
+              <circle cx="15" cy="15" r="14" fill="#6D28D9" />
+              <text x="15" y="19" text-anchor="middle" fill="#FFFFFF" font-size="11">🛰️</text>
+              <text x="15" y="38" text-anchor="middle" fill="#6D28D9" font-size="9" font-weight="bold">Avtonom Peyk & Mikrodalğa</text>
+            </g>
+
+            <!-- Əsas Optik Magistral Xətt -->
+            <path id="topoMainFiber" d="M 80 75 L 230 75 L 380 75 L 530 75 L 680 75" fill="none" stroke="#6D28D9" stroke-width="3.5" class="transition-all duration-500" />
+
+            <!-- Qovşaq 1: Ağdam -->
+            <g onclick="selectKarabakhNode(1)" class="cursor-pointer" id="topo-node-1">
+              <circle id="topo-dot-1" cx="80" cy="75" r="9" fill="#6D28D9" stroke="#FFFFFF" stroke-width="3" class="transition-all duration-300 drop-shadow" />
+              <text x="80" y="100" text-anchor="middle" font-size="11" font-weight="bold" fill="#0F172A">Ağdam #01</text>
+              <text x="80" y="115" text-anchor="middle" font-size="9" fill="#64748B">Sənaye Parkı</text>
+            </g>
+
+            <!-- Qovşaq 2: Şuşa -->
+            <g onclick="selectKarabakhNode(2)" class="cursor-pointer" id="topo-node-2">
+              <circle id="topo-dot-2" cx="230" cy="75" r="7" fill="#6D28D9" stroke="#FFFFFF" stroke-width="2" class="transition-all duration-300 drop-shadow" />
+              <text x="230" y="100" text-anchor="middle" font-size="11" font-weight="bold" fill="#0F172A">Şuşa Qala</text>
+              <text x="230" y="115" text-anchor="middle" font-size="9" fill="#64748B">Dövlət Qoruğu</text>
+            </g>
+
+            <!-- Qovşaq 4: Laçın -->
+            <g onclick="selectKarabakhNode(4)" class="cursor-pointer" id="topo-node-4">
+              <circle id="topo-dot-4" cx="380" cy="75" r="7" fill="#6D28D9" stroke="#FFFFFF" stroke-width="2" class="transition-all duration-300 drop-shadow" />
+              <text x="380" y="100" text-anchor="middle" font-size="11" font-weight="bold" fill="#0F172A">Laçın Tunel</text>
+              <text x="380" y="115" text-anchor="middle" font-size="9" fill="#64748B">Mikrosell Node</text>
+            </g>
+
+            <!-- Qovşaq 3: Zəngilan Ağalı -->
+            <g onclick="selectKarabakhNode(3)" class="cursor-pointer" id="topo-node-3">
+              <circle id="topo-dot-3" cx="530" cy="75" r="7" fill="#6D28D9" stroke="#FFFFFF" stroke-width="2" class="transition-all duration-300 drop-shadow" />
+              <text x="530" y="100" text-anchor="middle" font-size="11" font-weight="bold" fill="#0F172A">Zəngilan / Ağalı</text>
+              <text x="530" y="115" text-anchor="middle" font-size="9" fill="#64748B">Ağıllı Kənd IoT</text>
+            </g>
+
+            <!-- Qovşaq 5: Füzuli -->
+            <g onclick="selectKarabakhNode(5)" class="cursor-pointer" id="topo-node-5">
+              <circle id="topo-dot-5" cx="680" cy="75" r="7" fill="#6D28D9" stroke="#FFFFFF" stroke-width="2" class="transition-all duration-300 drop-shadow" />
+              <text x="680" y="100" text-anchor="middle" font-size="11" font-weight="bold" fill="#0F172A">Füzuli Airport</text>
+              <text x="680" y="115" text-anchor="middle" font-size="9" fill="#64748B">Aviasiya Radarı</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Sol: Strateji Qovşaq Siyahısı (5 sütun) -->
+        <div class="lg:col-span-5 space-y-3">
+          <div class="text-xs font-semibold text-slate-700 uppercase tracking-wider">Strateji Ərazi Qovşaqları</div>
+
+          <div id="karabakhCardsContainer" class="space-y-3">
+            <!-- Dinamik Qovşaq Kartları -->
+          </div>
+        </div>
+
+        <!-- Sağ: Canlı Telemetriya, AI Re-routing və Gizli Kâr Təhlili (7 sütun) -->
+        <div class="lg:col-span-7 space-y-4">
+
+          <!-- Qovşaq Status Paneli -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
+            <div class="flex items-start justify-between">
+              <div>
+                <span id="knodeBadge" class="text-[11px] font-semibold text-[#6D28D9] mb-1 block">Strateji Sənaye Qovşağı</span>
+                <h2 id="knodeTitle" class="text-base font-bold text-slate-900">Ağdam Sənaye Parkı Node #01</h2>
+                <div id="knodeConsumer" class="text-xs text-slate-500 mt-0.5">Xidmət Edilən: 14 İstehsal Zavodu & Tikinti Mərkəzi</div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs text-slate-400">Optik Siqnal Gücü</div>
+                <div id="knodeSignal" class="text-base font-bold text-slate-900 mt-0.5">-14.2 dBm</div>
+                <div class="text-[11px] text-[#6D28D9] font-medium">SLA: Kritik Qoruma</div>
+              </div>
+            </div>
+
+            <!-- Canlı Ərazi Şəraiti və Re-routing Sxemi -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <div class="text-[10px] font-bold uppercase text-slate-500 mb-1">Mövcud Ərazi Hadisəsi</div>
+                <div id="knodeStatusDesc" class="text-xs text-slate-700 leading-relaxed">
+                  Tikinti qazıntıları səbəbilə Ağdam-Xankəndi optik magistralında mikrozədələnmə riski aşkarlandı.
+                </div>
+              </div>
+              <div class="p-3 bg-[#FAF5FF] rounded-lg border border-[#DDD6FE]">
+                <div class="text-[10px] font-bold uppercase text-[#6D28D9] mb-1">Avtonom Marşrut Planı</div>
+                <div id="knodeRoutePlan" class="text-xs text-slate-800 leading-relaxed font-medium">
+                  Əsas Optik Kanal ➔ Şuşa-Ağdam Mikrodalğa / Peyk Dəhlizi
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Re-routing Trigger Düyməsi -->
+            <div class="flex items-center justify-between gap-4 pt-1">
+              <div class="text-xs text-slate-600">
+                Avtonom Kâr & Dayanıqlıq Modeli: <span class="font-bold text-[#6D28D9]">Aktiv</span>
+              </div>
+              <button id="btnKarabakhReroute" onclick="triggerKarabakhAI()" class="px-5 py-2.5 rounded-lg bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-semibold text-xs transition shadow-sm flex items-center gap-2">
+                <span id="karabakhSpinner" class="hidden animate-spin">⟳</span>
+                <span id="karabakhBtnText">Avtonom Yaşıl Enerji & Peyk Re-routing Təhlili</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3.2 Saniyəlik Səssiz Yüklənmə Qutusu -->
+          <div id="karabakhLoadingBox" class="hidden bg-white border border-[#DDD6FE] rounded-xl p-6 space-y-3 shadow-sm">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#6D28D9] animate-ping"></span>
+              <span class="text-xs font-bold text-slate-800 uppercase tracking-wider">Avtonom Re-routing və Kâr Marjası Hesablanır...</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+              <div id="karabakhProgressBar" class="bg-[#6D28D9] h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div class="text-[11px] text-slate-500 font-mono italic">
+              Dağlıq relyefdə optik siqnal stabilləşdirilir, günəş batareyaları balanslaşdırılır...
+            </div>
+          </div>
+
+          <!-- Nəticələr Bölməsi (İlkin olaraq gizlidir, düyməyə basanda açılır) -->
+          <div id="karabakhResults" class="hidden space-y-4">
+
+            <!-- Əsas Kâr və Dayanıqlıq Metrikası (YALNIZ KÂR YAŞILDIR) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                <div class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Xidmət İtkisi (Downtime)</div>
+                <div class="text-xl font-bold text-slate-900 mt-1">0.0 millisaniyə</div>
+                <div class="text-[10px] text-slate-500 font-medium mt-0.5">Avtonom kommutasiya</div>
+              </div>
+
+              <!-- YALNIZ BURADA YAŞIL KÂR RƏNGİ -->
+              <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                <div class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Qorunan Briqada Kârı</div>
+                <div id="kresProfit" class="text-xl font-bold text-emerald-600 mt-1">+2,400 ₼</div>
+                <div class="text-[10px] text-emerald-600 font-medium mt-0.5">Sahə xərci ləğv edildi</div>
+              </div>
+
+              <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                <div class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Yaşıl Batareya Ehtiyatı</div>
+                <div id="kresBattery" class="text-xl font-bold text-[#6D28D9] mt-1">38 Saat Avtonom</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">Buludlu hava optimallaşması</div>
+              </div>
+            </div>
+
+            <!-- Avtonom Re-routing Əməliyyat Protokolu -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded bg-[#6D28D9]"></span>
+                  <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">Avtonom Əməliyyat İcrası (NOC Protokolu)</span>
+                </div>
+                <span id="kresProtocolCode" class="text-[11px] font-bold text-[#6D28D9] bg-[#F5F3FF] px-2 py-0.5 rounded">
+                  QARABAGH-REROUTE-04
+                </span>
+              </div>
+
+              <div class="space-y-2.5">
+                <div class="p-3 bg-white border border-[#DDD6FE] rounded-lg text-xs shadow-xs">
+                  <div class="font-bold text-[#6D28D9] mb-0.5">1. Şəbəkə Re-routing (0.0 ms)</div>
+                  <div id="kresDetail1" class="text-slate-700 leading-relaxed">Ağdam Sənaye Parkının əsas optik kanalı zədələnmə ərəfəsində dərhal Şuşa-Ağdam mikrodalğalı ehtiyat dəhlizinə yönləndirildi. Zavodların elektrik və istehsal sistemləri 1 saniyə belə dayanmadı.</div>
+                </div>
+                <div class="p-3 bg-white border border-emerald-200 rounded-lg text-xs shadow-xs">
+                  <div class="font-bold text-emerald-600 mb-0.5">2. Maliyyə & Kâr Təsiri (+2,400 ₼)</div>
+                  <div id="kresDetail2" class="text-slate-700 leading-relaxed">Çətin relyefli dağlıq zonaya təcili texniki briqada göndərilməsinin (yanacaq, təhlükəsizlik eskortu, xüsusi texnika) qarşısı alındı, şirkət büdcəsində təmiz 2,400 ₼ birbaşa kâr saxlanıldı.</div>
+                </div>
+                <div class="p-3 bg-white border border-[#DDD6FE] rounded-lg text-xs shadow-xs">
+                  <div class="font-bold text-[#6D28D9] mb-0.5">3. Yaşıl Enerji İdarəetməsi</div>
+                  <div id="kresDetail3" class="text-slate-700 leading-relaxed">Günəş panellərinin enerji paylanması süni intellekt tərəfindən qənaət rejiminə keçirildi, axşam saatları üçün ehtiyat enerji 100% sığortalandı.</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SƏHİFƏ 2: MÜŞTƏRİ RİSKİ & LUMI SMS (2-Cİ SIRA)           -->
+    <!-- ======================================================== -->
+    <div id="tab-churn" class="tab-page hidden flex-1 overflow-y-auto custom-scrollbar p-8 space-y-6">
+
+      <!-- Əsas Göstəricilər (Yalnız Kâr hissəsi yaşıl) -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white border border-slate-200/80 rounded-xl p-4 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">İzlənilən Portfel Dəyəri</div>
+          <div id="statTotalLtv" class="text-2xl font-bold text-slate-900 mt-1">82,800 ₼</div>
+          <div class="text-[11px] text-slate-500 mt-1">Müqavilə LTV həcmi</div>
+        </div>
+
+        <div class="bg-white border border-slate-200/80 rounded-xl p-4 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Risk Altındakı Məbləğ</div>
+          <div id="statAtRiskLtv" class="text-2xl font-bold text-[#6D28D9] mt-1">57,600 ₼</div>
+          <div class="text-[11px] text-[#6D28D9] font-medium mt-1">Monitorinq olunan seqment</div>
+        </div>
+
+        <!-- YALNIZ BURADA YAŞIL KÂR RƏNGİ -->
+        <div class="bg-white border border-slate-200/80 rounded-xl p-4 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Kâr & Marja Qorunma</div>
+          <div class="text-2xl font-bold text-emerald-600 mt-1">100% Qorunur</div>
+          <div class="text-[11px] text-emerald-600 font-medium mt-1">Xalis kâr marjası zəmanəti</div>
+        </div>
+
+        <div class="bg-white border border-slate-200/80 rounded-xl p-4 shadow-sm">
+          <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Orta Abunəçi Sağlamlığı</div>
+          <div id="statHealth" class="text-2xl font-bold text-slate-800 mt-1">52.6 <span class="text-xs font-normal text-slate-400">/ 100</span></div>
+          <div class="text-[11px] text-slate-500 mt-1">Monitorinq rejimində</div>
+        </div>
+      </div>
+
+      <!-- İki Sütunlu Struktur -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Sol Tərəf: Müştəri Seçimi və Korporativ/Fərdi Filter -->
+        <div class="lg:col-span-5 space-y-3">
+          <div class="flex items-center p-1 bg-slate-200/70 rounded-lg">
+            <button onclick="setCustomerType('corporate')" id="filter-btn-corporate" class="flex-1 py-1.5 text-xs font-bold rounded-md bg-[#6D28D9] text-white shadow-sm transition">
+              Korporativ (B2B)
+            </button>
+            <button onclick="setCustomerType('individual')" id="filter-btn-individual" class="flex-1 py-1.5 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900 transition">
+              Fərdi Abunəçi (B2C)
+            </button>
+          </div>
+
+          <div id="customerCardsContainer" class="space-y-2.5">
+            <!-- Dinamik kartlar -->
+          </div>
+        </div>
+
+        <!-- Sağ Tərəf: Detallı Baxış, AI Hesabatı və LUMI SMS -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <div class="flex items-start justify-between">
+              <div>
+                <div id="detailCategoryLabel" class="text-[11px] font-semibold text-[#6D28D9] mb-1">
+                  VIP Korporativ
+                </div>
+                <h2 id="detailName" class="text-lg font-bold text-slate-900">Pasha Holdinq IT Departamenti</h2>
+                <div id="detailContact" class="text-xs text-slate-500 mt-0.5">Əlaqədar şəxs: Elnur Məmmədov</div>
+                <div id="detailProduct" class="text-xs text-slate-600 font-medium mt-1">Dedicated Fiber 500 Mbps + 100 Korporativ Xətt</div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs text-slate-400">Ümumi LTV</div>
+                <div id="detailLTV" class="text-lg font-bold text-slate-900 mt-0.5">57,600 ₼</div>
+                <div id="detailMonthly" class="text-xs text-slate-500 font-medium">Aylıq: 4,800 ₼</div>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-slate-100">
+              <div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center justify-between">
+                <span>Müştərinin Şikayəti & Tələbi</span>
+                <span id="detailRiskBadge" class="text-[#6D28D9] text-xs font-bold">Yüksək Risk</span>
+              </div>
+              <p id="detailFeedback" class="text-xs text-slate-700 leading-relaxed bg-slate-50 p-3.5 rounded-lg border border-slate-200/70">
+                <!-- Şikayət mətni -->
+              </p>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between gap-4">
+              <div class="text-xs text-slate-600">
+                Maksimum İcazəli Güzəşt Həddi: <span id="detailMarginLimit" class="font-bold text-[#6D28D9]">25%</span>
+              </div>
+              <button id="btnStartAnalysis" onclick="triggerSimulatedAIAnalysis()" class="px-5 py-2.5 rounded-lg bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-semibold text-xs transition shadow-sm flex items-center gap-2">
+                <span id="btnSpinner" class="hidden animate-spin">⟳</span>
+                <span id="btnLabel">Süni İntellekt ilə Təhlil Et</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Yüklənmə Sahəsi -->
+          <div id="loadingBox" class="hidden bg-white border border-[#DDD6FE] rounded-xl p-6 space-y-4 shadow-sm">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#6D28D9] animate-ping"></span>
+                <span class="text-xs font-bold text-slate-800 uppercase tracking-wider">Avtonom Dərin Təhlil Aparılır</span>
+              </div>
+              <span id="timerCountdown" class="text-xs font-bold text-[#6D28D9]">10.0s</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+              <div id="analysisProgressBar" class="bg-[#6D28D9] h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div id="logStream" class="bg-slate-50 rounded-lg p-3 text-xs text-slate-600 space-y-1.5 border border-slate-200/80 font-mono">
+              <div class="text-[#6D28D9]">> Abunəçinin şəbəkə telemetriyası və zəng tarixçəsi təhlil edilir...</div>
+            </div>
+          </div>
+
+          <!-- Nəticələr və LUMI SMS Bölməsi -->
+          <div id="resultsContainer" class="hidden space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                <div class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Ayrılma (Churn) Riski</div>
+                <div id="resChurnProb" class="text-xl font-bold text-[#6D28D9] mt-1">88.4%</div>
+                <div class="text-[10px] text-slate-500 font-medium mt-0.5">Kritik Səviyyə</div>
+              </div>
+              
+              <!-- YALNIZ KÂR HİSSƏSİ YAŞIL -->
+              <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                <div class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Qorunan Kâr / Güzəşt</div>
+                <div id="resDiscount" class="text-xl font-bold text-emerald-600 mt-1">18.0%</div>
+                <div id="resMarginSafe" class="text-[10px] text-emerald-600 font-medium mt-0.5">Kâr Marjası Qorundu (Limit: 25%)</div>
+              </div>
+              
+              <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                <div class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Qorunan İllik Dəyər</div>
+                <div id="resProtectedLtv" class="text-xl font-bold text-slate-900 mt-1">57,600 ₼</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">Müqavilə xilasetmə dəyəri</div>
+              </div>
+            </div>
+
+            <!-- Texniki Səbəb & Mühəndislik Tapşırığı -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-[#6D28D9]"></span>
+                  <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">Texniki Səbəb & NOC Tapşırığı</span>
+                </div>
+                <span id="resTicketId" class="text-[11px] font-semibold text-[#6D28D9] bg-[#F5F3FF] px-2.5 py-0.5 rounded">
+                  TICKET: AZC-NOC-4481
+                </span>
+              </div>
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <span class="text-slate-400 block text-[10px] uppercase font-semibold">Təsir Görən Xidmət:</span>
+                  <span id="resNode" class="text-slate-800 font-medium">Baku Central DWDM Ring #04</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 block text-[10px] uppercase font-semibold">Xəta Kateqoriyası:</span>
+                  <span id="resIncidentClass" class="text-[#6D28D9] font-medium">Paket İtirməsi & Şəbəkə Gecikməsi</span>
+                </div>
+              </div>
+              <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-700 leading-relaxed">
+                <span class="text-slate-500 block text-[10px] uppercase font-semibold mb-1">Mühəndislik Qərarı:</span>
+                <span id="resDevInsight">Avtomatik ehtiyat xəttə keçid edildi.</span>
+              </div>
+            </div>
+
+            <!-- LUMI TƏRƏFİNDƏN YAZILAN FƏRDİ SMS BİLDİRİŞİ -->
+            <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-[#6D28D9]"></span>
+                  <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">Lumi | Fərdi Müştəri SMS & Xilasetmə Bildirişi</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button onclick="copyLumiSms()" class="text-xs text-[#6D28D9] hover:text-[#5B21B6] font-semibold flex items-center gap-1 transition px-2.5 py-1 rounded border border-[#DDD6FE] hover:bg-white cursor-pointer">
+                    <span id="copyFeedback">SMS-i Kopyala</span>
+                  </button>
+                  <button onclick="sendLiveLumiSms()" class="px-3 py-1 rounded bg-[#6D28D9] hover:bg-[#5B21B6] text-white text-xs font-semibold shadow-xs flex items-center gap-1.5 transition cursor-pointer">
+                    <span>📱 SMS Göndər (Simulyasiya)</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- SMS Görünüşü -->
+              <div class="bg-[#FAF5FF] border border-[#DDD6FE] rounded-lg p-4 space-y-2">
+                <div class="flex items-center justify-between text-[11px] text-[#6D28D9] font-semibold pb-1 border-b border-[#DDD6FE]/60">
+                  <span>Göndərən: <b>Lumi AI (NOC & Retention)</b></span>
+                  <span id="smsTargetNumber">+994 50 200 88 01</span>
+                </div>
+                <div id="resLumiSms" class="text-xs text-slate-800 leading-relaxed whitespace-pre-line font-normal">
+                  <!-- Hər müştəriyə özəl SMS burada çıxacaq -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SƏHİFƏ 3: AEGISAGENT (3-CÜ SIRA)                         -->
+    <!-- ======================================================== -->
+    <div id="tab-aegis" class="tab-page hidden flex-1 overflow-y-auto custom-scrollbar p-8 space-y-6">
+
+      <!-- Başlıq Banneri -->
+      <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <span class="text-[11px] font-semibold text-[#6D28D9] uppercase tracking-wider">AegisAgent (Multi-Agent Debate)</span>
+          <h2 class="text-lg font-bold text-slate-900 mt-0.5">Çoxlu-Ajan Əsaslı Müqavilə və Təhlükəsizlik Denetçisi</h2>
+          <p class="text-xs text-slate-500 mt-1 max-w-2xl">
+            Tək bir chatbot deyil; bir-biri ilə müzakirə və arqument aparan 3 ixtisaslaşmış süni intellekt agenti: <b>Hüquqşünas Ajan</b>, <b>Maliyyəçi Ajan</b> və <b>Baş Denetçi</b>. Müqavilə risklərini və gizli operativ xərcləri qoruyur.
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="text-right">
+            <div class="text-xs font-semibold text-slate-700">Müqavilə Həcmi</div>
+            <div class="text-xl font-bold text-slate-900">115,200 ₼ / 2 İl</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Müqavilə Seçimi və Debat Paneli -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Sol: Müqavilə Sənədləri (4 sütun) -->
+        <div class="lg:col-span-4 space-y-3">
+          <div class="text-xs font-semibold text-slate-700 uppercase tracking-wider">İncələnən Müqavilələr</div>
+
+          <div id="contractCardsContainer" class="space-y-3">
+            <!-- Dinamik Müqavilə Kartları -->
+          </div>
+
+          <div class="p-4 bg-white border border-slate-200 rounded-xl shadow-sm space-y-3">
+            <div class="text-xs font-bold text-slate-800">AegisAgent Çoxlu Ajan Analizi</div>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Hüquqçu və Maliyyəçi ajanlar eyni sənədi fərqli prizmalardan oxuyur, Baş Denetçi isə debat yaradaraq risk matrisini yekunlaşdırır.
+            </p>
+            <button id="btnStartAegis" onclick="triggerAegisDebate()" class="w-full py-2.5 rounded-lg bg-[#6D28D9] hover:bg-[#5B21B6] text-white font-semibold text-xs transition shadow-sm flex items-center justify-center gap-2">
+              <span id="aegisSpinner" class="hidden animate-spin">⟳</span>
+              <span id="aegisBtnText">3 Ajanlı Debat Təhlilini Başlat</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sağ: 3 Ajanlı Debat Müzakirəsi və Risk Skor Xəritəsi (8 sütun) -->
+        <div class="lg:col-span-8 space-y-4">
+
+          <!-- 3 Ajanın Status Göstəricisi -->
+          <div class="grid grid-cols-3 gap-3">
+            <div class="bg-white border border-slate-200 p-3.5 rounded-xl shadow-sm text-center">
+              <div class="text-[10px] font-semibold text-[#6D28D9] uppercase">Ajan 1</div>
+              <div class="text-xs font-bold text-slate-900 mt-0.5">Hüquqşünas Ajan</div>
+              <div class="text-[11px] text-slate-500 mt-1">SLA və cərimə maddələri</div>
+            </div>
+            <div class="bg-white border border-slate-200 p-3.5 rounded-xl shadow-sm text-center">
+              <div class="text-[10px] font-semibold text-[#6D28D9] uppercase">Ajan 2</div>
+              <div class="text-xs font-bold text-slate-900 mt-0.5">Maliyyəçi Ajan</div>
+              <div class="text-[11px] text-slate-500 mt-1">Ödəniş və marja itkisi</div>
+            </div>
+            <div class="bg-white border border-slate-200 p-3.5 rounded-xl shadow-sm text-center">
+              <div class="text-[10px] font-semibold text-[#6D28D9] uppercase">Ajan 3</div>
+              <div class="text-xs font-bold text-slate-900 mt-0.5">Baş Denetçi</div>
+              <div class="text-[11px] text-slate-500 mt-1">Debat qərarı & Risk skoru</div>
+            </div>
+          </div>
+
+          <!-- Canlı Ajan Debatı -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#6D28D9]"></span>
+                <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">Ajanlar Arası Debat & Müzakirə Axını (Live Debate)</span>
+              </div>
+              <span class="text-[11px] text-slate-400 font-mono">Debate Protocol: ACTIVE</span>
+            </div>
+
+            <div id="debateStream" class="space-y-3 text-xs">
+              <div class="p-3 bg-[#FAF5FF] border border-[#DDD6FE] rounded-lg">
+                <div class="font-bold text-[#6D28D9] text-[11px] mb-1">Ajan 1 (Hüquqşünas):</div>
+                <div class="text-slate-700 leading-relaxed">
+                  "Maddə 14.2-də müştəriyə hər saatlıq kəsinti üçün aylıq ödənişin 5%-i həcmində cərimə tələb etmək hüququ verilib. Standart telekom SLA qaydalarında bu rəqəm maksimum 0.5%-dir. Birtərəfli hüquqi risk dərəcəsi həddindən artıq yüksəkdir."
+                </div>
+              </div>
+
+              <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                <div class="font-bold text-slate-800 text-[11px] mb-1">Ajan 2 (Maliyyəçi):</div>
+                <div class="text-slate-700 leading-relaxed">
+                  "Ajan 1-in arqumentini maliyyə baxımından təsdiqləyirəm. Əgər 10 saatlıq kəsinti baş verərsə, şirkət müştəriyə 2,400 ₼ cərimə ödəməli olacaq və müqavilənin xalis marjası mənfiyə düşəcək. Lakin müqavilənin ümumi illik dövriyyəsi 57,600 ₼ olduğu üçün bu müştərini itirmək daha böyük zərərdir."
+                </div>
+              </div>
+
+              <div class="p-3 bg-[#FAF5FF] border border-[#DDD6FE] rounded-lg">
+                <div class="font-bold text-[#6D28D9] text-[11px] mb-1">Ajan 3 (Baş Denetçi - Qərar və Kompromis):</div>
+                <div class="text-slate-800 leading-relaxed font-medium">
+                  "Hər iki təhlil nəzərə alındı. Yekun Düzəliş (Redline Amendment): Maddə 14.2 dəyişdirilməlidir. Cərimə həddi 5%-dən 1.2%-ə endirilsin və ümumi cərimə məbləğinə aylıq xidmət haqqının maksimum 15%-i qədər yuxarı tavan qoyulsun. Bu həm müştərini razı salır, həm də şirkət marjasını tam sığortalayır."
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Yekun Risk Skor Xəritəsi & Tövsiyələr -->
+          <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+              <span class="text-xs font-bold text-slate-900 uppercase tracking-wider">Müqavilə Risk Skor Xəritəsi & Düzəliş Tövsiyəsi</span>
+              <span class="text-xs font-bold text-[#6D28D9] bg-[#F5F3FF] px-2.5 py-0.5 rounded">Risk Skoru: 74 / 100</span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 text-xs">
+              <div class="p-2.5 bg-slate-50 rounded border border-slate-200">
+                <span class="text-slate-400 block text-[10px] uppercase font-semibold">Cərimə Riski</span>
+                <span class="text-[#6D28D9] font-bold mt-0.5 block">Yüksək (Maddə 14)</span>
+              </div>
+              <div class="p-2.5 bg-slate-50 rounded border border-slate-200">
+                <span class="text-slate-400 block text-[10px] uppercase font-semibold">Marja İtkisi Ehtimalı</span>
+                <span class="text-slate-700 font-bold mt-0.5 block">Maks: 15%</span>
+              </div>
+              <div class="p-2.5 bg-slate-50 rounded border border-slate-200">
+                <span class="text-slate-400 block text-[10px] uppercase font-semibold">Tövsiyə Olunan Status</span>
+                <span class="text-[#6D28D9] font-bold mt-0.5 block">Şərtlərlə İmzalanmalı</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SƏHİFƏ 4: AÇIQLAMA (PITCH & ROI)                           -->
+    <!-- ======================================================== -->
+    <div id="tab-mentor" class="tab-page hidden flex-1 overflow-y-auto custom-scrollbar p-8 space-y-6">
+
+      <!-- Başlıq və Hakaton Dəyər Təklifi -->
+      <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+        <div>
+          <span class="text-[11px] font-semibold text-[#6D28D9] uppercase tracking-wider">Hakaton Strategiyası & Memarlıq</span>
+          <h2 class="text-xl font-bold text-slate-900 mt-0.5">KOIP Niyə Qalib Layihədir? (Açıqlama)</h2>
+          <p class="text-xs text-slate-600 mt-1 max-w-4xl leading-relaxed">
+            Digər hakaton layihələrinin 80%-i sadəcə OpenAI API-ə bağlanmış standart chatbot gətirir. <b>KOIP</b> isə telekom şirkətlərinin və genişmiqyaslı şəbəkələrin ən böyük əməliyyat xərclərini (Qarabağ relyef logistikası, B2B abunəçi itkisi və yüzminlik müqavilə riskləri) avtonom həll edən <b>Universal Enterprise Əməliyyat Nüvəsidir</b>.
+          </p>
+        </div>
+      </div>
+
+      <!-- 3 Əsas Sütunun Vizual Hekayəsi -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Modul 1 -->
+        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-lg bg-[#6D28D9] text-white flex items-center justify-center font-bold text-xs">1</span>
+            <div>
+              <div class="text-xs font-bold text-slate-900">Qarabağ Strateji Şəbəkəsi</div>
+              <div class="text-[10px] text-[#6D28D9] font-medium">Avtonom Yaşıl NOC & Peyk Ops</div>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Dağ relyefində fiber qopanda briqada göndərmək 4-5 saat və böyük ezamiyyə xərcidir. KOIP 0.0 ms-də peyk/radiorele dəhlizinə keçirir, xidmət 1 saniyə belə dayanmır.
+          </p>
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-slate-500">Birbaşa Sahə Kârı:</span>
+            <span class="font-bold text-emerald-600">+24,800 ₼/ay</span>
+          </div>
+        </div>
+
+        <!-- Modul 2 -->
+        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-lg bg-[#6D28D9] text-white flex items-center justify-center font-bold text-xs">2</span>
+            <div>
+              <div class="text-xs font-bold text-slate-900">Müştəri Riski & Lumi AI</div>
+              <div class="text-[10px] text-[#6D28D9] font-medium">Marja Qoruma & Fərdi SMS</div>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Kənan Şahbazov kimi Qarabağ Universitetində tələbə olan fərdi abunəçidən tutmuş Pasha Holdinqə kimi; DWDM/LTE problemini aşkarlayır, sərt marja limiti ilə fərdi Lumi SMS yazır.
+          </p>
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-slate-500">Qorunan Müqavilə LTV:</span>
+            <span class="font-bold text-slate-900">57,600 ₼</span>
+          </div>
+        </div>
+
+        <!-- Modul 3 -->
+        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-lg bg-[#6D28D9] text-white flex items-center justify-center font-bold text-xs">3</span>
+            <div>
+              <div class="text-xs font-bold text-slate-900">AegisAgent Çoxlu-Ajan</div>
+              <div class="text-[10px] text-[#6D28D9] font-medium">Debat Əsaslı Müqavilə Auditi</div>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Tək chatbot səhv edir; Hüquqşünas və Maliyyəçi ajanlar PDF müqaviləni ayrı-ayrı təhlil edib bir-biri ilə debat aparır, Baş Denetçi isə riskləri neytrallaşdıran Redline hazırlayır.
+          </p>
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-slate-500">Cərimə Sanksiya Riski:</span>
+            <span class="font-bold text-[#6D28D9]">5% ➔ 1.2% Endirildi</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rəqiblərlə Müqayisə Cədvəli -->
+      <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">Rəqabət Üstünlüyü: Rəqiblər vs KOIP</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Standart hakaton həlləri, ənənəvi telekom metodları və KOIP müqayisəsi</p>
+          </div>
+          <span class="text-[11px] font-bold text-[#6D28D9] bg-[#F5F3FF] px-2.5 py-1 rounded-md">
+            Enterprise Benchmark
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 text-slate-400 font-semibold text-[11px]">
+                <th class="py-2.5 px-3">Meyar</th>
+                <th class="py-2.5 px-3">Digər Hakaton Layihələri</th>
+                <th class="py-2.5 px-3">Ənənəvi Telekom Metodu</th>
+                <th class="py-2.5 px-3 text-[#6D28D9] bg-[#FAF5FF] font-bold rounded-t-lg">KOIP Enterprise Platforması</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr>
+                <td class="py-3 px-3 font-bold text-slate-900">Süni İntellekt Memarlığı</td>
+                <td class="py-3 px-3 text-slate-500">Tək OpenAI botu (sadə chatbot)</td>
+                <td class="py-3 px-3 text-slate-500">Mürəkkəb insan komandaları</td>
+                <td class="py-3 px-3 font-semibold text-[#6D28D9] bg-[#FAF5FF]">Multi-Agent Debat + Avtonom NOC Şəbəkə Re-routing</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-3 font-bold text-slate-900">Qarabağ Şəbəkə Qəzaları</td>
+                <td class="py-3 px-3 text-slate-500">Mövzudan kənar / Yoxdur</td>
+                <td class="py-3 px-3 text-slate-500">Briqada 4.5 saat dağ yolu keçir</td>
+                <td class="py-3 px-3 font-semibold text-[#6D28D9] bg-[#FAF5FF]">0.0 ms avtonom peyk və mikrodalğa kommutasiyası</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-3 font-bold text-slate-900">Maliyyə & Marja Qorunması</td>
+                <td class="py-3 px-3 text-slate-500">Yoxdur (Kâra nəzarət etmir)</td>
+                <td class="py-3 px-3 text-slate-500">Həftələrlə daxili büdcə təsdiqi</td>
+                <td class="py-3 px-3 font-semibold text-emerald-600 bg-[#FAF5FF]">+24,800 ₼/ay sahə kârı saxlayır (Sərt marja limiti: 25%)</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-3 font-bold text-slate-900">Abunəçi Yanaşması</td>
+                <td class="py-3 px-3 text-slate-500">Statik və cansız bot cavabı</td>
+                <td class="py-3 px-3 text-slate-500">Zəng mərkəzində 15 dəqiqə gözləmə</td>
+                <td class="py-3 px-3 font-semibold text-[#6D28D9] bg-[#FAF5FF]">Telemetriyaya bağlı fərdi Lumi SMS (Kənan Şahbazov nümunəsi)</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-3 font-bold text-slate-900">Xəta və Hallüsinasiya Riski</td>
+                <td class="py-3 px-3 text-slate-500">Yüksək (Tək model yalan danışır)</td>
+                <td class="py-3 px-3 text-slate-500">İnsan yorğunluğu (18.4% səhv)</td>
+                <td class="py-3 px-3 font-semibold text-[#6D28D9] bg-[#FAF5FF]">3 Ajanlı Konsensus Modeli (< 0.1% xəta payı)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Ənənəvi Metodlar vs KOIP: İqtisadi Fərq & ROI -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+          <div class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">İnsan Səhvləri Riski</div>
+          <div class="text-2xl font-bold text-slate-900 mt-1">< 0.1%</div>
+          <div class="text-[11px] text-slate-500 mt-1">Ənənəvi: 18.4% ➔ 184 dəfə azalma</div>
+        </div>
+
+        <!-- YALNIZ KÂR YAŞILDIR -->
+        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+          <div class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Qorunan Sahə Kârı</div>
+          <div class="text-2xl font-bold text-emerald-600 mt-1">+24,800 ₼</div>
+          <div class="text-[11px] text-emerald-600 font-medium mt-1">Hər ay ləğv edilən briqada xərci</div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+          <div class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Qəzaya Reaksiya Müddəti</div>
+          <div class="text-2xl font-bold text-[#6D28D9] mt-1">0.0 millisaniyə</div>
+          <div class="text-[11px] text-slate-500 mt-1">Ənənəvi: 4.5 saat dağ yolu</div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+          <div class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">NOC Briqada Rejimi</div>
+          <div class="text-2xl font-bold text-slate-900 mt-1">24 / 7 Avtonom</div>
+          <div class="text-[11px] text-slate-500 mt-1">İnsan əməyindən asılılıq: 0%</div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Floating Toast Bildirişi (Lumi SMS Göndərildi) -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-[#2E1065] text-white px-5 py-3.5 rounded-xl shadow-2xl border border-purple-500/30 flex items-center gap-3 transition-all duration-300 transform translate-y-24 opacity-0 pointer-events-none">
+    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+    <div>
+      <div class="text-xs font-bold text-white flex items-center gap-1.5">
+        <span>✓ Lumi SMS Uğurla Göndərildi</span>
+      </div>
+      <div id="toastTargetInfo" class="text-[11px] text-purple-200 mt-0.5">+994 12 345 67 89 (Kənan Şahbazov - Qarabağ Universiteti)</div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // SƏHİFƏLƏRARASI NAVİQASİYA
+    // ==========================================
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-page').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.className = "nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-white/60 transition";
+        const svg = el.querySelector('svg');
+        if (svg) svg.className = "w-4 h-4 text-slate-400";
+      });
+
+      const activeBtn = document.getElementById('nav-' + tabId);
+      if (activeBtn) {
+        activeBtn.className = "nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-semibold text-white bg-[#6D28D9] shadow-sm transition";
+        const svg = activeBtn.querySelector('svg');
+        if (svg) svg.className = "w-4 h-4 text-white";
+      }
+
+      if (tabId === 'karabakh-tab') {
+        document.getElementById('tab-karabakh').classList.remove('hidden');
+        document.getElementById('pageTitle').innerText = "Qarabağ & Şərqi Zəngəzur Strateji Şəbəkə Mərkəzi";
+        document.getElementById('pageSubtitle').innerText = "B2B Sənaye və Yaşıl Baza Stansiyaları";
+      } else if (tabId === 'churn-tab') {
+        document.getElementById('tab-churn').classList.remove('hidden');
+        document.getElementById('pageTitle').innerText = "Müştəri Riski & Lumi SMS Analizi";
+        document.getElementById('pageSubtitle').innerText = "Lumi AI Xilasetmə və Bildiriş Sistemi";
+      } else if (tabId === 'aegis-tab') {
+        document.getElementById('tab-aegis').classList.remove('hidden');
+        document.getElementById('pageTitle').innerText = "AegisAgent | Çoxlu Ajanlı Denetçi";
+        document.getElementById('pageSubtitle').innerText = "Müqavilə Təhlükəsizliyi & Debat Protokolu";
+      } else if (tabId === 'mentor-tab') {
+        document.getElementById('tab-mentor').classList.remove('hidden');
+        document.getElementById('pageTitle').innerText = "Açıqlama";
+        document.getElementById('pageSubtitle').innerText = "KOIP Arxitekturası, Rəqabət Üstünlüyü və İqtisadi ROI";
+      }
+    }
+
+    // ==========================================
+    // TAB 1: QARABAĞ STRATEJİ ŞƏBƏKƏ LOGIC
+    // ==========================================
+    let currentKnodeId = 1;
+    let isKarabakhAnalyzing = false;
+
+    const karabakhNodesData = {
+      1: {
+        id: 1,
+        title: "Ağdam Sənaye Parkı Node #01",
+        type: "Dedicated Fiber",
+        b2b: "B2B İstehlakçılar: 14 İstehsal və Tikinti Zavodu",
+        cardDesc: "Tikinti qazıntıları səbəbilə magistral fiberdə titrəyiş siqnalı qeydə alınıb.",
+        energy: "Hibrid Şəbəkə",
+        statusText: "Gözləmədə: Re-routing",
+        badge: "Strateji Sənaye Qovşağı",
+        consumer: "Xidmət Edilən: 14 İstehsal Zavodu & Tikinti Mərkəzi",
+        signal: "-14.2 dBm",
+        status: "Tikinti qazıntıları səbəbilə Ağdam-Xankəndi optik magistralında mikrozədələnmə riski aşkarlandı. Əraziyə dağlıq yollarla texniki briqada göndərilməsi həm 4-5 saat gecikmə, həm də yüksək ezamiyyə xərci yaradır.",
+        routePlan: "Əsas Optik Kanal ➔ Şuşa-Ağdam Mikrodalğa / Peyk Dəhlizi (0.0 ms gecikmə)",
+        profit: "+2,400 ₼",
+        battery: "38 Saat Avtonom",
+        code: "QARABAGH-REROUTE-04",
+        d1: "Ağdam Sənaye Parkının əsas optik kanalı zədələnmə ərəfəsində dərhal Şuşa-Ağdam mikrodalğalı ehtiyat dəhlizinə yönləndirildi. Zavodların elektrik və istehsal sistemləri 1 saniyə belə dayanmadı.",
+        d2: "Çətin relyefli dağlıq zonaya təcili texniki briqada göndərilməsinin (yanacaq, təhlükəsizlik eskortu, xüsusi texnika) qarşısı alındı, şirkət büdcəsində təmiz 2,400 ₼ birbaşa kâr saxlanıldı.",
+        d3: "Günəş panellərinin enerji paylanması süni intellekt tərəfindən qənaət rejiminə keçirildi, axşam saatları üçün ehtiyat enerji 100% sığortalandı."
+      },
+      2: {
+        id: 2,
+        title: "Şuşa Qala Node #04",
+        type: "Günəş + Radiorele",
+        b2b: "B2B İstehlakçılar: Şuşa Dövlət Qoruğu, Otellər, İnzibati Mərkəz",
+        cardDesc: "Dağlıq dumanlı hava şəraiti: günəş paneli generasiyası 45%-ə enib.",
+        energy: "Günəş Paneli 68%",
+        statusText: "Stabil",
+        badge: "Strateji Dövlət & Turizm Qovşağı",
+        consumer: "Xidmət Edilən: Şuşa Dövlət Qoruğu, 4 B2B Otel & İnzibati Mərkəz",
+        signal: "-16.8 dBm",
+        status: "Qatı duman və dağlıq hava şəraiti səbəbilə günəş paneli generasiyası 45%-ə düşüb. AI batareya qorunma protokolunu işə salır və kritik kanalları prioritetləşdirir.",
+        routePlan: "Günəş Enerjisi (45%) ➔ Laçın Radiorele Balansı & Ehtiyat Batareya Rejimi",
+        profit: "+3,100 ₼",
+        battery: "48 Saat Ehtiyat",
+        code: "SHUSHA-SOLAR-09",
+        d1: "Şuşa Qala stansiyasının radiorele ötürücüsü aşağı enerji rejiminə keçirildi, rabitə zolağı Laçın peyk qovşağı ilə balanslaşdırıldı.",
+        d2: "Yüksək dağ şəraitində generatora yanacaq daşınması ləğv edildi, 3,100 ₼ logistika xərci birbaşa kâr olaraq saxlanıldı.",
+        d3: "Qoruq və otellərin korporativ interneti fasiləsiz davam edir."
+      },
+      3: {
+        id: 3,
+        title: "Zəngilan / Ağalı Ağıllı Kənd Node",
+        type: "IoT & M2M Şəbəkə",
+        b2b: "B2B İstehlakçılar: Zəngilan Aqropark, Ağıllı Suvarma Sensorları",
+        cardDesc: "M2M telemetriya loqları normaldır, 450 aqrar sensor aktivdir.",
+        energy: "100% Yaşıl Günəş",
+        statusText: "Normal",
+        badge: "Strateji Kənd Təsərrüfatı & IoT",
+        consumer: "Xidmət Edilən: Zəngilan Aqropark, 450 Suvarma Sensoru & İnzibati Mərkəz",
+        signal: "-11.5 dBm",
+        status: "Ağalı ərazisində 100% təmiz günəş enerjisi aktivdir. IoT tor şəbəkəsində 12 sensorun məlumat gecikməsi aradan qaldırıldı.",
+        routePlan: "Ağalı M2M Sensorları ➔ Lokal Edge Gateway & 100% Yaşıl Günəş Şəbəkəsi",
+        profit: "+1,800 ₼",
+        battery: "100% Yaşıl Enerji",
+        code: "AGHALI-SMART-02",
+        d1: "Aqroparkın avtomatlaşdırılmış suvarma və sensor məlumatları lokal Edge qovşağına yönləndirildi.",
+        d2: "Sahəyə texniki baxış ezamiyyəsi avtomatlaşdırılmış kalibrləmə ilə əvəz olundu (+1,800 ₼ qənaət).",
+        d3: "Sensorların batareya dövriyyəsi optimallaşdırıldı."
+      },
+      4: {
+        id: 4,
+        title: "Laçın Dəhliz Tunel Qovşağı #02",
+        type: "Optik Mikrosell",
+        b2b: "B2B İstehlakçılar: Nəqliyyat & Yol Tikinti Podratçıları",
+        cardDesc: "Dağlıq tunel daxili rabitə zolağında ehtiyat generator aktivdir.",
+        energy: "Tunel Şəbəkəsi",
+        statusText: "Monitorinq",
+        badge: "Strateji Nəqliyyat & Magistral Dəhlizi",
+        consumer: "Xidmət Edilən: Tunel Tikinti Podratçıları & Nəqliyyat Şirkətləri",
+        signal: "-15.0 dBm",
+        status: "Laçın dağlıq tunelində yol-infrastruktur qazıntıları nəticəsində daxili kabel zəifləməsi müşahidə edildi.",
+        routePlan: "Tunel Daxili Optik ➔ Mikrosell Şüalandırıcı & Avtonom Generator Zolağı",
+        profit: "+2,900 ₼",
+        battery: "40 Saat Avtonom",
+        code: "LACHIN-TUNNEL-07",
+        d1: "Tunel daxili mikrosell şüalandırıcıları avtomatik gücləndirildi, podratçıların radioəlaqəsi bərpa olundu.",
+        d2: "Laçın dağ yoluna fövqəladə mobil stansiya göndərilməsinə ehtiyac qalmadı (+2,900 ₼ kâr).",
+        d3: "Magistral təhlükəsizlik kamerası və telemetriya fasiləsiz qorundu."
+      },
+      5: {
+        id: 5,
+        title: "Füzuli Beynəlxalq Hava Limanı Node",
+        type: "Dedicated SLA",
+        b2b: "B2B İstehlakçılar: Aviasiya Logistika & Terminal İnfrastrukturu",
+        cardDesc: "Uçuş təhlükəsizliyi və meteoroloji radar kanalları fasiləsiz işləyir.",
+        energy: "Dövlət Şəbəkəsi + UPS",
+        statusText: "Prioritet",
+        badge: "Strateji Aviasiya & Tranzit Logistika",
+        consumer: "Xidmət Edilən: Hava Limanı Terminalı, Radar Şəbəkəsi, Gömrük Postu",
+        signal: "-10.2 dBm",
+        status: "Uçuş təhlükəsizliyi üçün ən yüksək P0 dərəcəli Dedicated SLA aktivdir. İkiqat ehtiyat rabitə kanalı sinxrondur.",
+        routePlan: "Füzuli Terminalı ➔ İkiqat Sinxron Optik Ring + Radar SLA Prioriteti",
+        profit: "+4,200 ₼",
+        battery: "Fasiləsiz UPS + Şəbəkə",
+        code: "FIZULI-AIR-01",
+        d1: "Füzuli Hava Limanının əsas və ehtiyat optik xətləri real-vaxtda balanslaşdırıldı.",
+        d2: "Radar və dispetçer telemetriyasında sıfır risk zəmanəti verildi (+4,200 ₼ cərimə sığortası kârı).",
+        d3: "Aviasiya rabitə protokolu tam qorunur."
+      }
+    };
+
+    function renderKarabakhCards() {
+      const container = document.getElementById('karabakhCardsContainer');
+      if (!container) return;
+
+      const nodes = [
+        karabakhNodesData[1],
+        karabakhNodesData[2],
+        karabakhNodesData[3],
+        karabakhNodesData[4],
+        karabakhNodesData[5]
+      ];
+
+      container.innerHTML = nodes.map(n => {
+        const isSelected = n.id === currentKnodeId;
+        if (isSelected) {
+          return `
+            <div onclick="selectKarabakhNode(${n.id})" id="knode-card-${n.id}" class="knode-card p-4 rounded-xl border bg-[#6D28D9] border-[#6D28D9] text-white cursor-pointer shadow-md transition">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-bold text-white">${n.title}</span>
+                <span class="text-[10px] font-semibold bg-white/20 text-white px-2 py-0.5 rounded">${n.type}</span>
+              </div>
+              <div class="text-[11px] text-purple-200 font-medium">${n.b2b}</div>
+              <div class="mt-2 text-xs text-purple-100">${n.cardDesc}</div>
+              <div class="mt-2.5 pt-2 border-t border-purple-400/40 flex items-center justify-between text-[11px]">
+                <span class="text-purple-200">Enerji: <b class="text-white font-medium">${n.energy}</b></span>
+                <span class="text-white font-semibold">${n.statusText}</span>
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div onclick="selectKarabakhNode(${n.id})" id="knode-card-${n.id}" class="knode-card p-4 rounded-xl border bg-white border-slate-200/90 hover:border-[#DDD6FE] text-slate-900 cursor-pointer shadow-sm transition">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-bold text-slate-900">${n.title}</span>
+                <span class="text-[10px] font-semibold text-[#6D28D9]">${n.type}</span>
+              </div>
+              <div class="text-[11px] text-slate-600 font-medium">${n.b2b}</div>
+              <div class="mt-2 text-xs text-slate-500">${n.cardDesc}</div>
+              <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                <span class="text-slate-500">Enerji: <b class="text-slate-800 font-medium">${n.energy}</b></span>
+                <span class="text-[#6D28D9] font-semibold">${n.statusText}</span>
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    function selectKarabakhNode(id) {
+      if (isKarabakhAnalyzing) return;
+      currentKnodeId = id;
+      renderKarabakhCards();
+
+      // Qovşaq seçiləndə nəticə gizlənir, yalnız düyməyə basanda açılır
+      const resBox = document.getElementById('karabakhResults');
+      if (resBox) resBox.classList.add('hidden');
+
+      const data = karabakhNodesData[id];
+      if (data) {
+        document.getElementById('knodeBadge').innerText = data.badge;
+        document.getElementById('knodeTitle').innerText = data.title;
+        document.getElementById('knodeConsumer').innerText = data.consumer;
+        document.getElementById('knodeSignal').innerText = data.signal;
+        document.getElementById('knodeStatusDesc').innerText = data.status;
+        document.getElementById('knodeRoutePlan').innerText = data.routePlan;
+        document.getElementById('kresProfit').innerText = data.profit;
+        document.getElementById('kresBattery').innerText = data.battery;
+        document.getElementById('kresProtocolCode').innerText = data.code;
+        document.getElementById('kresDetail1').innerText = data.d1;
+        document.getElementById('kresDetail2').innerText = data.d2;
+        document.getElementById('kresDetail3').innerText = data.d3;
+      }
+
+      // SVG Topologiya nöqtələrini canlı vurğula
+      [1, 2, 3, 4, 5].forEach(num => {
+        const dot = document.getElementById(`topo-dot-${num}`);
+        if (dot) {
+          if (num === id) {
+            dot.setAttribute('r', '10');
+            dot.setAttribute('stroke-width', '4');
+            dot.setAttribute('fill', '#6D28D9');
+          } else {
+            dot.setAttribute('r', '7');
+            dot.setAttribute('stroke-width', '2');
+            dot.setAttribute('fill', '#7C3AED');
+          }
+        }
+      });
+    }
+
+    // Dəqiq 3.2 Saniyəlik AI Re-routing (Saniyə sayğacı görünmür)
+    function triggerKarabakhAI() {
+      if (isKarabakhAnalyzing) return;
+      isKarabakhAnalyzing = true;
+
+      const btn = document.getElementById('btnKarabakhReroute');
+      const spinner = document.getElementById('karabakhSpinner');
+      const text = document.getElementById('karabakhBtnText');
+      const loadingBox = document.getElementById('karabakhLoadingBox');
+      const progressBar = document.getElementById('karabakhProgressBar');
+      const resBox = document.getElementById('karabakhResults');
+
+      // Təhlil başlayanda köhnə nəticəni gizlət
+      if (resBox) resBox.classList.add('hidden');
+
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+      spinner.classList.remove('hidden');
+      text.innerText = "Təhlil Aparılır...";
+      loadingBox.classList.remove('hidden');
+      progressBar.style.width = '0%';
+
+      let elapsed = 0;
+      const totalDuration = 3200; // 3.2 seconds
+      const intervalMs = 50;
+
+      const timer = setInterval(() => {
+        elapsed += intervalMs;
+        const pct = Math.min(100, (elapsed / totalDuration) * 100);
+        progressBar.style.width = `${pct}%`;
+
+        if (elapsed >= totalDuration) {
+          clearInterval(timer);
+          isKarabakhAnalyzing = false;
+          btn.disabled = false;
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+          spinner.classList.add('hidden');
+          text.innerText = "Avtonom Yaşıl Enerji & Peyk Re-routing Təhlili";
+          loadingBox.classList.add('hidden');
+
+          // Təhlil bitəndə nəticə blokunu açırıq
+          if (resBox) {
+            resBox.classList.remove('hidden');
+            resBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }
+      }, intervalMs);
+    }
+
+    // ⚡ Qəza / Hadisə Simulyasiyası (Mentor üçün İnteraktiv Şou)
+    let isFaultSimulating = false;
+    function triggerNetworkFaultSimulation() {
+      if (isFaultSimulating) return;
+      isFaultSimulating = true;
+
+      const btn = document.getElementById('btnSimulateFault');
+      const icon = document.getElementById('faultSimIcon');
+      const btnText = document.getElementById('faultSimBtnText');
+      const pill = document.getElementById('simStatusPill');
+      const signalEl = document.getElementById('knodeSignal');
+      const mainFiber = document.getElementById('topoMainFiber');
+      const backupLine = document.getElementById('topoBackupLine');
+
+      // 1. Qəza anı: Optik magistral qırılır
+      btn.disabled = true;
+      btn.className = "px-3.5 py-1.5 rounded-lg border border-red-300 bg-red-50 text-red-600 font-bold text-xs transition shadow-xs flex items-center gap-1.5 cursor-not-allowed";
+      icon.innerText = "⚠️";
+      btnText.innerText = "Qəza Baş Verdi! Re-routing...";
+      
+      pill.className = "text-[11px] font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-md border border-red-200 animate-pulse";
+      pill.innerText = "Kritik Xəbərdarlıq: Optik Kabel Qırıldı!";
+
+      signalEl.innerText = "-29.8 dBm (Kritik Qəza)";
+      signalEl.className = "text-base font-bold text-red-600 mt-0.5 animate-pulse";
+
+      if (mainFiber) {
+        mainFiber.setAttribute('stroke', '#EF4444');
+        mainFiber.setAttribute('stroke-dasharray', '8,6');
+      }
+
+      // 2. 1.2 saniyə sonra KOIP avtonom re-routing işə salır
+      setTimeout(() => {
+        if (backupLine) {
+          backupLine.setAttribute('stroke', '#10B981');
+          backupLine.setAttribute('stroke-width', '4');
+          backupLine.setAttribute('stroke-dasharray', '0');
+        }
+
+        pill.className = "text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200";
+        pill.innerText = "✓ Avtonom Re-routing: 0.0 ms Downtime";
+
+        signalEl.innerText = "-12.4 dBm (Peyk Bərpa)";
+        signalEl.className = "text-base font-bold text-[#6D28D9] mt-0.5";
+
+        btnText.innerText = "Avtonom Bərpa Edildi (+2,400 ₼ Kâr)";
+        btn.className = "px-3.5 py-1.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-700 font-bold text-xs transition shadow-xs flex items-center gap-1.5";
+        icon.innerText = "✓";
+
+        // Təhlil nəticələrini dərhal ekranda göstər
+        const resBox = document.getElementById('karabakhResults');
+        if (resBox) resBox.classList.remove('hidden');
+
+        setTimeout(() => {
+          // 4.5 saniyədən sonra sistemi stabil rejimə qaytar
+          btn.disabled = false;
+          btn.className = "px-3.5 py-1.5 rounded-lg border border-[#7C3AED] bg-[#FAF5FF] hover:bg-[#6D28D9] hover:text-white text-[#6D28D9] font-bold text-xs transition shadow-xs flex items-center gap-1.5 cursor-pointer";
+          icon.innerText = "⚡";
+          btnText.innerText = "Optik Kabel Qəzası Simulyasiya Et";
+          pill.className = "text-[11px] font-semibold text-[#6D28D9] bg-[#F5F3FF] px-2.5 py-1 rounded-md border border-[#DDD6FE]";
+          pill.innerText = "Stabil Şəbəkə";
+
+          if (mainFiber) {
+            mainFiber.setAttribute('stroke', '#6D28D9');
+            mainFiber.removeAttribute('stroke-dasharray');
+          }
+          if (backupLine) {
+            backupLine.setAttribute('stroke', '#C4B5FD');
+            backupLine.setAttribute('stroke-width', '2.5');
+            backupLine.setAttribute('stroke-dasharray', '6,4');
+          }
+
+          const currentData = karabakhNodesData[currentKnodeId];
+          if (currentData) {
+            signalEl.innerText = currentData.signal;
+          }
+          isFaultSimulating = false;
+        }, 5000);
+
+      }, 1400);
+    }
+
+    // ==========================================
+    // TAB 2: CHURN & LUMI SMS LOGIC
+    // ==========================================
+    let allData = { corporate: [], individual: [] };
+    let currentCustomerType = 'corporate';
+    let selectedCustomerId = null;
+    let isAnalyzing = false;
+
+    // Hər müştəriyə özəl LUMI SMS bazası (Kənan Şahbazov Qarabağ Universiteti ilə)
+    const lumiSmsDatabase = {
+      "AZC-8801": {
+        phone: "+994 50 200 88 01 (Elnur M.)",
+        sms: `Hörmətli Elnur m., ofisinizdəki optik fiber kəsintisinə görə üzr istəyirik. Magistral xətt tam bərpa olundu. Sizinlə tərəfdaşlığımıza verilən dəyərin göstəricisi olaraq növbəti fakturanıza 18% xüsusi kompensasiya endirimi tətbiq edildi. Şəxsi meneceriniz bu gün sizinlə əlaqə saxlayacaq. - Lumi | Korporativ Şəbəkə Mərkəzi`
+      },
+      "AZC-6214": {
+        phone: "+994 50 310 62 14 (Nigar Ə.)",
+        sms: `Hörmətli Nigar xanım, Kapital Lojistika avtoparkının Bakı-Quba yolundakı M2M siqnal problemi həll edildi. Kompensasiya olaraq növbəti ay üçün 14% xüsusi endirim və 20 GB əlavə data paketi simkartlarınıza yükləndi. - Lumi | B2B Əməliyyat Mərkəzi`
+      },
+      "AZC-3109": {
+        phone: "+994 50 440 31 09 (Tural H.)",
+        sms: `Hörmətli Tural bəy, rouminq fakturanızdakı texniki uyğunsuzluq aradan qaldırıldı və artıq çıxılan 42 AZN balansınıza geri qaytarıldı. Əlavə olaraq növbəti ay üçün 12% güzəşt aktiv edildi. - Lumi | Müştəri Uğuru Mərkəzi`
+      },
+      "AZC-IND-104": {
+        phone: "+994 12 345 67 89 (Kənan Ş.)",
+        sms: `Salam, Kənan bəy! Qarabağ Universitetinin Xankəndi şəhərciyində təhsilinizdə uğurlar arzulayırıq. Kampus ərazisindəki şəbəkə sıxlığı ilə bağlı müraciətiniz əsasında KOIP sistemi tərəfindən universitet korpusuna xidmət edən Xankəndi Mərkəz Baza Stansiyası avtonom re-routing rejimində Şuşa yüksək tezlikli optik zolağına bağlandı. Sürət sabitliyi tam təmin edildi! Tələbə dəstəyi olaraq balansınıza 1 ay müddətinə 15 GB əlavə təhsil paketi yükləndi. Dərslərinizdə müvəffəqiyyətlər! - Lumi AI | Şəbəkə Dəstək`
+      },
+      "AZC-IND-101": {
+        phone: "+994 51 901 10 11 (Aysel Ö.)",
+        sms: `Hörmətli Aysel xanım, Yasamal ərazisindəki baza stansiyasında gücləndirmə işləri tamamlandı. Narahatlığınıza görə növbəti aylıq Sərbəst 25 abunə haqqınıza 15% endirim və 10 GB pulsuz gecə interneti hədiyyə olundu! - Lumi AI | Şəbəkə Dəstək`
+      },
+      "AZC-IND-102": {
+        phone: "+994 55 802 10 22 (Murad S.)",
+        sms: `Salam, Murad bəy! Tətbiqdəki tarif xətası aradan qaldırıldı. GəncOl 15 tarifiniz üçün növbəti ay 10% endirim və 3 ay ərzində Instagram, TikTok və WhatsApp-dan tam limitsiz pulsuz istifadə aktiv edildi! - Lumi AI | Rəqəmsal Dəstək`
+      },
+      "AZC-IND-103": {
+        phone: "+994 50 703 10 33 (Ayaz S.)",
+        sms: `Salam, Ayaz bəy. Metro və zirzəmi ərazilərində zənglərin kəsilməməsi üçün nömrənizdə Wi-Fi Calling (VoWiFi) xidməti prioritet aktiv edildi! Həmçinin növbəti abunə haqqınıza 20% kompensasiya endirimi tətbiq olundu. - Lumi AI | Şəbəkə Dəstək`
+      }
+    };
+
+    const fallbackCustomersData = {
+      "corporate": [
+        {
+          "customer_id": "AZC-8801",
+          "type": "corporate",
+          "name": "Pasha Holdinq IT Departamenti",
+          "contact_person": "Elnur Məmmədov",
+          "tier": "VIP Korporativ",
+          "monthly_spend_azn": 4800,
+          "lifetime_value_azn": 57600,
+          "contract_duration_months": 24,
+          "margin_limit_percentage": 25,
+          "product": "Dedicated Fiber 500 Mbps + 100 Korporativ Xətt",
+          "current_health_score": 38,
+          "churn_risk_level": "Yüksək Risk",
+          "churn_probability": 88,
+          "feedback": "Son 10 gündə ofisimizdə 3 dəfə kritik fiber kəsintisi oldu. Bank tranzaksiyalarımız və beynəlxalq konfrans zənglərimiz dayandı. Dəstək xəttinizdə 22 dəqiqə gözlədikdən sonra ancaq 'araşdırılır' cavabı aldıq. Müqaviləmizi birtərəfli ləğv edib alternativ provayderə keçməyi müzakirə edirik."
+        },
+        {
+          "customer_id": "AZC-6214",
+          "type": "corporate",
+          "name": "Kapital Lojistika MMC",
+          "contact_person": "Nigar Əliyeva",
+          "tier": "Biznes Pro",
+          "monthly_spend_azn": 1450,
+          "lifetime_value_azn": 17400,
+          "contract_duration_months": 12,
+          "margin_limit_percentage": 18,
+          "product": "M2M GPS İzləmə Parkı (120 Simkart)",
+          "current_health_score": 52,
+          "churn_risk_level": "Orta Risk",
+          "churn_probability": 64,
+          "feedback": "Sürücülərimizin planşetlərindəki M2M simkartlar axşam saatlarında şəbəkə itirir. Bakı-Quba magistralında GPS siqnalları kəsilir, logistika marşrutları gecikir. Dəfələrlə bildirsək də texniki şöbəniz qənaətbəxş cavab verməyib."
+        },
+        {
+          "customer_id": "AZC-3109",
+          "type": "corporate",
+          "name": "Caspian Agro Qrup",
+          "contact_person": "Tural Hüseynov",
+          "tier": "Standart B2B",
+          "monthly_spend_azn": 650,
+          "lifetime_value_azn": 7800,
+          "contract_duration_months": 12,
+          "margin_limit_percentage": 12,
+          "product": "Korporativ Komanda Paketi (35 Nömrə)",
+          "current_health_score": 68,
+          "churn_risk_level": "Aşağı Risk",
+          "churn_probability": 31,
+          "feedback": "Fakturalarda rouminq xərclərinin hesablanmasında uyğunsuzluq var. Hər ay əlavə xidmət haqqı çıxılır, tətbiqdən detallaşdırma yükləmək olmur. Aydınlıq gətirilməsini tələb edirik."
+        }
+      ],
+      "individual": [
+        {
+          "customer_id": "AZC-IND-104",
+          "type": "individual",
+          "name": "Kənan Şahbazov",
+          "contact_person": "Kənan Şahbazov",
+          "tier": "Tələbə / GəncOl",
+          "monthly_spend_azn": 16,
+          "lifetime_value_azn": 384,
+          "contract_duration_months": 24,
+          "margin_limit_percentage": 25,
+          "product": "GəncOl Tələbə (15 GB İnternet + Hədsiz Zənglər)",
+          "current_health_score": 45,
+          "churn_risk_level": "Yüksək Risk",
+          "churn_probability": 79,
+          "feedback": "Qarabağ Universitetində (Xankəndi şəhərciyi) oxuyuram. Universitet korpusunda və yataqxanada mobil internet çox zəif tutur, onlayn mühazirələr və elmi resurslara qoşulanda şəbəkə qırılır. Universitet daxilində stabil əlaqə təmin edilməsini xahiş edirəm."
+        },
+        {
+          "customer_id": "AZC-IND-101",
+          "type": "individual",
+          "name": "Aysel Özbəkov",
+          "contact_person": "Aysel Özbəkov",
+          "tier": "Fərdi Abunəçi",
+          "monthly_spend_azn": 25,
+          "lifetime_value_azn": 600,
+          "contract_duration_months": 24,
+          "margin_limit_percentage": 20,
+          "product": "Sərbəst 25 (25 GB İnternet + 500 Dəqiqə)",
+          "current_health_score": 41,
+          "churn_risk_level": "Yüksək Risk",
+          "churn_probability": 82,
+          "feedback": "Evdə mobil internetin sürəti dəhşət dərəcədə aşağıdır. Hər axşam YouTube və Zoom donur, 4G işarəsi 3G-yə düşür. Bu qədər pul ödəyirəm, amma keyfiyyət yoxdur. Belə davam etsə nömrəmi başqa operatora daşıyacağam (MNP)."
+        },
+        {
+          "customer_id": "AZC-IND-102",
+          "type": "individual",
+          "name": "Murad Səfərli",
+          "contact_person": "Murad Səfərli",
+          "tier": "Fərdi Abunəçi",
+          "monthly_spend_azn": 15,
+          "lifetime_value_azn": 360,
+          "contract_duration_months": 24,
+          "margin_limit_percentage": 15,
+          "product": "GəncOl 15 (10 GB İnternet + Hədsiz Sosial)",
+          "current_health_score": 58,
+          "churn_risk_level": "Orta Risk",
+          "churn_probability": 59,
+          "feedback": "Tarifimdəki meqabaytlar çox tez bitir. Sosial şəbəkələrdə daxil olanda əlavə balansdan pul çıxılır. Tətbiqdə tarif dəyişməyə çalışıram, daimi xəta verir və müştəri xidmətinə zəng çatdırmaq olmur."
+        },
+        {
+          "customer_id": "AZC-IND-103",
+          "type": "individual",
+          "name": "Ayaz Səfərov",
+          "contact_person": "Ayaz Səfərov",
+          "tier": "Fərdi Abunəçi",
+          "monthly_spend_azn": 40,
+          "lifetime_value_azn": 960,
+          "contract_duration_months": 24,
+          "margin_limit_percentage": 25,
+          "product": "SuperSən 40 (50 GB İnternet + 1000 Dəqiqə)",
+          "current_health_score": 49,
+          "churn_risk_level": "Yüksək Risk",
+          "churn_probability": 76,
+          "feedback": "Metroda və iş yerimin zirzəmisində şəbəkə tamamilə itir, vacib zəngləri qəbul edə bilmirəm. Digər operatorlar işlədiyi halda cari provayder 'xidmət dairəsi xaricində' qalır. Aylıq 40 AZN abunə haqqı ödəyirəm, amma əlaqə qura bilmirəm."
+        }
+      ]
+    };
+
+    async function init() {
+      selectKarabakhNode(1);
+      renderContractCards();
+      try {
+        const res = await fetch('/api/customers');
+        if (res.ok) {
+          allData = await res.json();
+        } else {
+          allData = fallbackCustomersData;
+        }
+      } catch (err) {
+        allData = fallbackCustomersData;
+      }
+      if (!allData || !allData.corporate) {
+        allData = fallbackCustomersData;
+      }
+      renderCustomerCards();
+      selectFirstCustomer();
+    }
+
+    function setCustomerType(type) {
+      if (isAnalyzing) return;
+      currentCustomerType = type;
+
+      const btnCorp = document.getElementById('filter-btn-corporate');
+      const btnInd = document.getElementById('filter-btn-individual');
+
+      if (type === 'corporate') {
+        btnCorp.className = "flex-1 py-1.5 text-xs font-bold rounded-md bg-[#6D28D9] text-white shadow-sm transition";
+        btnInd.className = "flex-1 py-1.5 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900 transition";
+        document.getElementById('statTotalLtv').innerText = "82,800 ₼";
+        document.getElementById('statAtRiskLtv').innerText = "57,600 ₼";
+        document.getElementById('statHealth').innerHTML = "52.6 <span class='text-xs font-normal text-slate-400'>/ 100</span>";
+      } else {
+        btnInd.className = "flex-1 py-1.5 text-xs font-bold rounded-md bg-[#6D28D9] text-white shadow-sm transition";
+        btnCorp.className = "flex-1 py-1.5 text-xs font-medium rounded-md text-slate-600 hover:text-slate-900 transition";
+        document.getElementById('statTotalLtv').innerText = "2,304 ₼";
+        document.getElementById('statAtRiskLtv').innerText = "1,944 ₼";
+        document.getElementById('statHealth').innerHTML = "48.2 <span class='text-xs font-normal text-slate-400'>/ 100</span>";
+      }
+
+      renderCustomerCards();
+      selectFirstCustomer();
+    }
+
+    function selectFirstCustomer() {
+      const list = allData[currentCustomerType] || [];
+      if (list.length > 0) {
+        selectCustomer(list[0].customer_id);
+      }
+    }
+
+    function renderCustomerCards() {
+      const list = allData[currentCustomerType] || [];
+      const container = document.getElementById('customerCardsContainer');
+
+      container.innerHTML = list.map(c => {
+        const isSelected = c.customer_id === selectedCustomerId;
+
+        if (isSelected) {
+          return `
+            <div onclick="selectCustomer('${c.customer_id}')" 
+                 class="p-3.5 rounded-xl border cursor-pointer transition bg-[#6D28D9] border-[#6D28D9] text-white shadow-md">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-bold text-white truncate max-w-[200px]">${c.name}</span>
+                <span class="text-[10px] font-semibold bg-white/20 text-white px-2 py-0.5 rounded">${c.churn_risk_level}</span>
+              </div>
+              <div class="text-[11px] text-purple-200 truncate">${c.product}</div>
+              <div class="mt-2.5 flex items-center justify-between text-xs pt-2 border-t border-purple-400/40">
+                <span class="text-purple-200">LTV: <b class="text-white font-semibold">${c.lifetime_value_azn.toLocaleString()} ₼</b></span>
+                <span class="text-white font-bold">${c.monthly_spend_azn.toLocaleString()} ₼/ay</span>
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div onclick="selectCustomer('${c.customer_id}')" 
+                 class="p-3.5 rounded-xl border cursor-pointer transition bg-white border-slate-200/80 hover:border-[#DDD6FE] text-slate-900 shadow-sm">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-bold text-slate-900 truncate max-w-[200px]">${c.name}</span>
+                <span class="text-[11px] font-semibold text-[#6D28D9]">${c.churn_risk_level}</span>
+              </div>
+              <div class="text-[11px] text-slate-500 truncate">${c.product}</div>
+              <div class="mt-2.5 flex items-center justify-between text-xs pt-2 border-t border-slate-100">
+                <span class="text-slate-500">LTV: <b class="text-slate-900 font-semibold">${c.lifetime_value_azn.toLocaleString()} ₼</b></span>
+                <span class="text-[#6D28D9] font-bold">${c.monthly_spend_azn.toLocaleString()} ₼/ay</span>
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    function selectCustomer(id) {
+      if (isAnalyzing) return;
+      selectedCustomerId = id;
+      renderCustomerCards();
+
+      const list = allData[currentCustomerType] || [];
+      const c = list.find(x => x.customer_id === id);
+      if (!c) return;
+
+      document.getElementById('detailCategoryLabel').innerText = c.tier;
+      document.getElementById('detailName').innerText = c.name;
+      document.getElementById('detailContact').innerText = `Müştəri: ${c.contact_person}`;
+      document.getElementById('detailProduct').innerText = c.product;
+      document.getElementById('detailLTV').innerText = `${c.lifetime_value_azn.toLocaleString()} ₼`;
+      document.getElementById('detailMonthly').innerText = `Aylıq: ${c.monthly_spend_azn.toLocaleString()} ₼`;
+      document.getElementById('detailFeedback').innerText = `"${c.feedback}"`;
+      document.getElementById('detailMarginLimit').innerText = `${c.margin_limit_percentage}%`;
+      document.getElementById('detailRiskBadge').innerText = c.churn_risk_level;
+
+      document.getElementById('resultsContainer').classList.add('hidden');
+      document.getElementById('loadingBox').classList.add('hidden');
+    }
+
+    function triggerSimulatedAIAnalysis() {
+      if (isAnalyzing) return;
+      isAnalyzing = true;
+
+      const list = allData[currentCustomerType] || [];
+      const c = list.find(x => x.customer_id === selectedCustomerId);
+      if (!c) return;
+
+      const btn = document.getElementById('btnStartAnalysis');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const btnLabel = document.getElementById('btnLabel');
+      const loadingBox = document.getElementById('loadingBox');
+      const resultsContainer = document.getElementById('resultsContainer');
+      const progressBar = document.getElementById('analysisProgressBar');
+      const countdown = document.getElementById('timerCountdown');
+      const logStream = document.getElementById('logStream');
+
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+      btnSpinner.classList.remove('hidden');
+      btnLabel.innerText = "Təhlil Aparılır...";
+      resultsContainer.classList.add('hidden');
+      loadingBox.classList.remove('hidden');
+
+      let secondsLeft = 10.0;
+      progressBar.style.width = '0%';
+      logStream.innerHTML = '';
+
+      const isCorp = currentCustomerType === 'corporate';
+      const logs = isCorp ? [
+        { time: 9.0, text: `[1.0s] ${c.customer_id} müqaviləsi üzrə son 60 günlük CDR və fiber telemetriya loqları çəkilir...` },
+        { time: 7.0, text: `[3.0s] DWDM Magistralında 3 dəfə kritik SLA gecikməsi və paket itkisi aşkarlandı.` },
+        { time: 5.0, text: `[5.0s] Marja Qoruma Alqoritmi: Kâr büdcəsi qorunur (Limit: ${c.margin_limit_percentage}%).` },
+        { time: 3.0, text: `[7.0s] Lumi tərəfindən fərdi xilasetmə SMS-i və bildiriş mətni tərtib edilir...` },
+        { time: 1.0, text: `[9.0s] NOC Texniki Eskalasiya Bileti (P1) formalaşdırıldı. Bütün nəticələr hazırdır.` }
+      ] : [
+        { time: 9.0, text: `[1.0s] Abunəçinin ${c.name} nömrəsi üzrə baza stansiya siqnal gücü və data sessiyaları yoxlanılır...` },
+        { time: 7.0, text: `[3.0s] Zirzəmi və pik saatlarda 4G -> 3G düşməsi və paket itkisi təsdiqləndi.` },
+        { time: 5.0, text: `[5.0s] Abunəçinin MNP riski: ${c.churn_probability}%. Kâr marjası qorunur: ${c.margin_limit_percentage}%.` },
+        { time: 3.0, text: `[7.0s] Lumi fərdi abunəçi güzəşt SMS-i və əlavə internet bonusu hazırlandı...` },
+        { time: 1.0, text: `[9.0s] Texniki radio-şəbəkə optimallaşdırma tapşırığı mühəndislərə yönləndirildi.` }
+      ];
+
+      const interval = setInterval(() => {
+        secondsLeft -= 0.1;
+        const elapsed = 10.0 - secondsLeft;
+        const pct = Math.min(100, (elapsed / 10.0) * 100);
+        progressBar.style.width = `${pct}%`;
+        countdown.innerText = `${Math.max(0, secondsLeft).toFixed(1)}s`;
+
+        logs.forEach(l => {
+          if (secondsLeft <= l.time && !l.triggered) {
+            l.triggered = true;
+            const line = document.createElement('div');
+            line.className = "text-[#6D28D9]";
+            line.innerText = `> ${l.text}`;
+            logStream.appendChild(line);
+          }
+        });
+
+        if (secondsLeft <= 0) {
+          clearInterval(interval);
+          finishAnalysis(c);
+        }
+      }, 100);
+    }
+
+    function finishAnalysis(c) {
+      isAnalyzing = false;
+      const btn = document.getElementById('btnStartAnalysis');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const btnLabel = document.getElementById('btnLabel');
+      const loadingBox = document.getElementById('loadingBox');
+      const resultsContainer = document.getElementById('resultsContainer');
+
+      btn.disabled = false;
+      btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      btnSpinner.classList.add('hidden');
+      btnLabel.innerText = "Yenidən Təhlil Et";
+      loadingBox.classList.add('hidden');
+
+      const safeDiscount = Math.round(c.margin_limit_percentage * 0.75);
+
+      document.getElementById('resChurnProb').innerText = `${c.churn_probability}.0%`;
+      document.getElementById('resDiscount').innerText = `${safeDiscount}.0%`;
+      document.getElementById('resMarginSafe').innerText = `Kâr Qorundu (Limit: ${c.margin_limit_percentage}%)`;
+      document.getElementById('resProtectedLtv').innerText = `${c.lifetime_value_azn.toLocaleString()} ₼`;
+
+      if (c.customer_id === 'AZC-8801') {
+        document.getElementById('resTicketId').innerText = "TICKET: AZC-NOC-4481";
+        document.getElementById('resNode').innerText = "Baku Central DWDM Ring #04";
+        document.getElementById('resIncidentClass').innerText = "Fiber Paket İtirməsi (>14.2%)";
+        document.getElementById('resDevInsight').innerText = "Kritik fiber marşrutu avtomatik ehtiyat xəttə keçirildi. Texniki heyətə 24 saatlıq fasiləsiz SLA monitorinqi tapşırıldı.";
+      } else if (c.customer_id === 'AZC-6214') {
+        document.getElementById('resTicketId').innerText = "TICKET: AZC-M2M-8912";
+        document.getElementById('resNode').innerText = "M2M APN Gateway / Quba Magistral";
+        document.getElementById('resIncidentClass').innerText = "GPS Ping Timeout (Siqnal İtkisi)";
+        document.getElementById('resDevInsight').innerText = "M2M profilləri üzrə dinamik IP sessiyaları yeniləndi. 4G baza stansiyalarının siqnal bucağı optimallaşdırıldı.";
+      } else if (c.customer_id === 'AZC-3109') {
+        document.getElementById('resTicketId').innerText = "TICKET: AZC-BILL-1044";
+        document.getElementById('resNode').innerText = "B2B Billing & Roaming Sync";
+        document.getElementById('resIncidentClass').innerText = "Detallaşdırma Sinxronizasiya Xətası";
+        document.getElementById('resDevInsight').innerText = "Rouminq fakturalama loqları təkrar yoxlanıldı. 42 ₼ kompensasiya krediti müştərinin cari hesabına avtomatik yükləndi.";
+      } else if (c.customer_id === 'AZC-IND-104') {
+        // Kənan Şahbazov - Qarabağ Universiteti
+        document.getElementById('resTicketId').innerText = "TICKET: AZC-QRB-UNI-01";
+        document.getElementById('resNode').innerText = "Qarabağ Universiteti / Xankəndi Şəhərciyi Node";
+        document.getElementById('resIncidentClass').innerText = "Kampus Daxili Zolaq Sıxlığı & Re-routing Ehtiyacı";
+        document.getElementById('resDevInsight').innerText = "Xankəndi baza stansiyası dərhal Şuşa optik magistralına bağlandı. Universitet korpusu üçün MIMO tutumu 2 qat artırıldı.";
+      } else if (c.customer_id === 'AZC-IND-101') {
+        document.getElementById('resTicketId').innerText = "TICKET: AZC-IND-7719";
+        document.getElementById('resNode').innerText = "Yasamal Baza Stansiyası 4G/LTE";
+        document.getElementById('resIncidentClass').innerText = "Pik Saatlarında Hücrə Yüklənməsi";
+        document.getElementById('resDevInsight').innerText = "Ərazidəki baza stansiyasında MIMO 4x4 tezlik zolağı genişləndirildi.";
+      } else if (c.customer_id === 'AZC-IND-102') {
+        document.getElementById('resTicketId').innerText = "TICKET: AZC-IND-8820";
+        document.getElementById('resNode').innerText = "GəncOl Tarif Şlüzü API";
+        document.getElementById('resIncidentClass').innerText = "Tətbiq Tarif Dəyişmə Xətası";
+        document.getElementById('resDevInsight').innerText = "Tətbiqdəki tarif dəyişmə API xətası aradan qaldırıldı.";
+      } else {
+        document.getElementById('resTicketId').innerText = "TICKET: AZC-IND-9931";
+        document.getElementById('resNode').innerText = "Nizami Metrostansiyası Mikrosell";
+        document.getElementById('resIncidentClass').innerText = "Zirzəmi Ərazisində Siqnal İtkisi";
+        document.getElementById('resDevInsight').innerText = "VoLTE və Wi-Fi Calling (VoWiFi) xidmətləri prioritet olaraq aktivləşdirildi.";
+      }
+
+      const lumiData = lumiSmsDatabase[c.customer_id] || {
+        phone: "+994 50 000 00 00",
+        sms: `Hörmətli müştəri, narahatlığınıza görə üzr istəyirik. Probleminiz aradan qaldırıldı və növbəti fakturanıza ${safeDiscount}% xüsusi endirim tətbiq edildi. - Lumi AI`
+      };
+
+      document.getElementById('smsTargetNumber').innerText = lumiData.phone;
+      document.getElementById('resLumiSms').innerText = lumiData.sms;
+
+      resultsContainer.classList.remove('hidden');
+    }
+
+    function copyLumiSms() {
+      const text = document.getElementById('resLumiSms').innerText;
+      navigator.clipboard.writeText(text);
+      const feedback = document.getElementById('copyFeedback');
+      feedback.innerText = "✓ Kopyalandı";
+      setTimeout(() => { feedback.innerText = "SMS-i Kopyala"; }, 2000);
+    }
+
+    function sendLiveLumiSms() {
+      const list = allData[currentCustomerType] || [];
+      const c = list.find(x => x.customer_id === selectedCustomerId) || { name: "Abunəçi" };
+      const lumiData = lumiSmsDatabase[selectedCustomerId] || { phone: "+994 12 345 67 89" };
+
+      const toast = document.getElementById('toastNotification');
+      const toastInfo = document.getElementById('toastTargetInfo');
+      if (!toast) return;
+
+      toastInfo.innerText = `${lumiData.phone}`;
+      toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+      }, 3500);
+    }
+
+    // ==========================================
+    // TAB 3: AEGISAGENT LOGIC
+    // ==========================================
+    let isAegisDebating = false;
+    let selectedContractId = 1;
+
+    const contractsData = [
+      {
+        id: 1,
+        title: "Pasha Holdinq — Fiber Optik SLA",
+        pages: "142 Səhifə",
+        val: "Dəyər: 115,200 ₼ • 24 Aylıq Korporativ Müqavilə",
+        desc: "Maddə 14 (Gecikmə sanksiyaları) və Maddə 21 (Birtərəfli xitam) üzrə risk siqnalları.",
+        badge: "Kritik Hüquqi Risk",
+        type: "PDF Analizi"
+      },
+      {
+        id: 2,
+        title: "Kapital Lojistika — M2M Təchizat",
+        pages: "68 Səhifə",
+        val: "Dəyər: 34,800 ₼ • 12 Aylıq M2M Data Şəbəkəsi",
+        desc: "Cihaz zəmanəti və rouminq data məhdudiyyətləri maddələri.",
+        badge: "Maliyyə Riski",
+        type: "PDF Analizi"
+      }
+    ];
+
+    function renderContractCards() {
+      const container = document.getElementById('contractCardsContainer');
+      if (!container) return;
+
+      container.innerHTML = contractsData.map(c => {
+        const isSelected = c.id === selectedContractId;
+        if (isSelected) {
+          return `
+            <div onclick="selectContract(${c.id})" id="contract-card-${c.id}" class="contract-card p-4 rounded-xl border bg-[#6D28D9] border-[#6D28D9] text-white cursor-pointer shadow-md transition">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-bold text-white">${c.title}</span>
+                <span class="text-[10px] font-semibold bg-white/20 text-white px-2 py-0.5 rounded">${c.pages}</span>
+              </div>
+              <div class="text-[11px] text-purple-200">${c.val}</div>
+              <div class="mt-2 text-xs text-purple-100">${c.desc}</div>
+              <div class="mt-2.5 pt-2 border-t border-purple-400/40 flex items-center justify-between text-[11px]">
+                <span class="text-white font-bold">${c.badge}</span>
+                <span class="text-purple-200">${c.type}</span>
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div onclick="selectContract(${c.id})" id="contract-card-${c.id}" class="contract-card p-4 rounded-xl border bg-white border-slate-200/90 hover:border-[#DDD6FE] text-slate-900 cursor-pointer shadow-sm transition">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-xs font-bold text-slate-900">${c.title}</span>
+                <span class="text-[10px] font-semibold text-slate-500">${c.pages}</span>
+              </div>
+              <div class="text-[11px] text-slate-600">${c.val}</div>
+              <div class="mt-2 text-xs text-slate-500">${c.desc}</div>
+              <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                <span class="text-[#6D28D9] font-bold">${c.badge}</span>
+                <span class="text-slate-400">${c.type}</span>
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    function selectContract(id) {
+      selectedContractId = id;
+      renderContractCards();
+    }
+
+    function triggerAegisDebate() {
+      if (isAegisDebating) return;
+      isAegisDebating = true;
+
+      const btn = document.getElementById('btnStartAegis');
+      const spinner = document.getElementById('aegisSpinner');
+      const text = document.getElementById('aegisBtnText');
+      const debateStream = document.getElementById('debateStream');
+
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+      spinner.classList.remove('hidden');
+      text.innerText = "Ajanlar Debat Aparır...";
+
+      debateStream.innerHTML = `
+        <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg text-[#6D28D9] font-mono text-[11px] animate-pulse">
+          > 3 Ajan eyni anda 142 səhifəlik PDF sənədini oxuyur və arqument toplayır...
+        </div>
+      `;
+
+      setTimeout(() => {
+        debateStream.innerHTML = `
+          <div class="p-3 bg-[#FAF5FF] border border-[#DDD6FE] rounded-lg">
+            <div class="font-bold text-[#6D28D9] text-[11px] mb-1">Ajan 1 (Hüquqşünas):</div>
+            <div class="text-slate-700 leading-relaxed">
+              "Maddə 14.2-də müştəriyə hər saatlıq kəsinti üçün aylıq ödənişin 5%-i həcmində cərimə tələb etmək hüququ verilib. Standart telekom SLA qaydalarında bu rəqəm maksimum 0.5%-dir. Birtərəfli hüquqi risk dərəcəsi həddindən artıq yüksəkdir."
+            </div>
+          </div>
+        `;
+      }, 2000);
+
+      setTimeout(() => {
+        debateStream.innerHTML += `
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg mt-3">
+            <div class="font-bold text-slate-800 text-[11px] mb-1">Ajan 2 (Maliyyəçi):</div>
+            <div class="text-slate-700 leading-relaxed">
+              "Ajan 1-in arqumentini maliyyə baxımından təsdiqləyirəm. Əgər 10 saatlıq kəsinti baş verərsə, şirkət müştəriyə 2,400 ₼ cərimə ödəməli olacaq və müqavilənin xalis marjası mənfiyə düşəcək. Lakin müqavilənin ümumi illik dövriyyəsi 57,600 ₼ olduğu üçün bu müştərini itirmək daha böyük zərərdir."
+            </div>
+          </div>
+        `;
+      }, 4500);
+
+      setTimeout(() => {
+        debateStream.innerHTML += `
+          <div class="p-3 bg-[#FAF5FF] border border-[#DDD6FE] rounded-lg mt-3">
+            <div class="font-bold text-[#6D28D9] text-[11px] mb-1">Ajan 3 (Baş Denetçi - Qərar və Kompromis):</div>
+            <div class="text-slate-800 leading-relaxed font-medium">
+              "Hər iki təhlil nəzərə alındı. Yekun Düzəliş (Redline Amendment): Maddə 14.2 dəyişdirilməlidir. Cərimə həddi 5%-dən 1.2%-ə endirilsin və ümumi cərimə məbləğinə aylıq xidmət haqqının maksimum 15%-i qədər yuxarı tavan qoyulsun. Bu həm müştərini razı salır, həm də şirkət marjasını tam sığortalayır."
+            </div>
+          </div>
+        `;
+
+        isAegisDebating = false;
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        spinner.classList.add('hidden');
+        text.innerText = "Yenidən Debat Başlat";
+      }, 7000);
+    }
+
+    init();
+  </script>
+</body>
+</html>

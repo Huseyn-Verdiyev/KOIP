@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/customers", "destination": "/data/customers.json" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
