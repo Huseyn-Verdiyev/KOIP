@@ -27,6 +27,13 @@
       border-radius: 4px;
     }
   </style>
+
+  <script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({pageLanguage: 'az', includedLanguages: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay: false}, 'google_translate_element');
+  }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body class="flex h-screen overflow-hidden bg-[#F5F3FF] text-slate-900">
 
@@ -91,6 +98,16 @@
         <h1 id="pageTitle" class="text-xs font-bold text-slate-900">Qarabağ & Şərqi Zəngəzur Strateji Şəbəkə Mərkəzi</h1>
         <span class="text-xs text-slate-300">/</span>
         <span id="pageSubtitle" class="text-xs text-slate-500 font-medium">B2B Sənaye və Yaşıl Baza Stansiyaları</span>
+      </div>
+
+      <!-- Dil Dəyişdirici (AZ / EN) -->
+      <div class="flex items-center gap-1 bg-white border border-[#DDD6FE] rounded-lg p-1 shadow-xs">
+        <button id="lang-btn-az" onclick="setLanguage('az')" class="px-2.5 py-1 text-[11px] font-bold rounded bg-[#6D28D9] text-white transition cursor-pointer">
+          🇦🇿 AZ
+        </button>
+        <button id="lang-btn-en" onclick="setLanguage('en')" class="px-2.5 py-1 text-[11px] font-medium text-slate-600 hover:text-slate-900 rounded transition cursor-pointer">
+          🇬🇧 EN
+        </button>
       </div>
 
     </header>
@@ -862,6 +879,26 @@
 
   <script>
     // ==========================================
+    // DİL DƏYİŞDİRİCİ (BILINGUAL AZ / EN)
+    // ==========================================
+    let currentLang = 'az';
+
+    function setLanguage(lang) {
+      if (lang === 'en') {
+        document.cookie = "googtrans=/az/en; path=/";
+        document.cookie = "googtrans=/az/en; domain=localhost; path=/";
+        document.cookie = "googtrans=/az/en; domain=127.0.0.1; path=/";
+      } else {
+        document.cookie = "googtrans=/az/az; path=/";
+        document.cookie = "googtrans=/az/az; domain=localhost; path=/";
+        document.cookie = "googtrans=/az/az; domain=127.0.0.1; path=/";
+        // Also remove cookie
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      }
+      window.location.search = '?lang=' + lang;
+    }
+    
+    // ==========================================
     // SƏHİFƏLƏRARASI NAVİQASİYA
     // ==========================================
     function switchTab(tabId) {
@@ -881,20 +918,40 @@
 
       if (tabId === 'karabakh-tab') {
         document.getElementById('tab-karabakh').classList.remove('hidden');
-        document.getElementById('pageTitle').innerText = "Qarabağ & Şərqi Zəngəzur Strateji Şəbəkə Mərkəzi";
-        document.getElementById('pageSubtitle').innerText = "B2B Sənaye və Yaşıl Baza Stansiyaları";
+        if (currentLang === 'en') {
+          document.getElementById('pageTitle').innerText = "Karabakh Strategic Network Operations Center";
+          document.getElementById('pageSubtitle').innerText = "B2B Industrial & Green Base Stations";
+        } else {
+          document.getElementById('pageTitle').innerText = "Qarabağ & Şərqi Zəngəzur Strateji Şəbəkə Mərkəzi";
+          document.getElementById('pageSubtitle').innerText = "B2B Sənaye və Yaşıl Baza Stansiyaları";
+        }
       } else if (tabId === 'churn-tab') {
         document.getElementById('tab-churn').classList.remove('hidden');
-        document.getElementById('pageTitle').innerText = "Müştəri Riski & Lumi SMS Analizi";
-        document.getElementById('pageSubtitle').innerText = "Lumi AI Xilasetmə və Bildiriş Sistemi";
+        if (currentLang === 'en') {
+          document.getElementById('pageTitle').innerText = "Customer Risk & Lumi SMS Analytics";
+          document.getElementById('pageSubtitle').innerText = "Lumi AI Proactive Retention System";
+        } else {
+          document.getElementById('pageTitle').innerText = "Müştəri Riski & Lumi SMS Analizi";
+          document.getElementById('pageSubtitle').innerText = "Lumi AI Xilasetmə və Bildiriş Sistemi";
+        }
       } else if (tabId === 'aegis-tab') {
         document.getElementById('tab-aegis').classList.remove('hidden');
-        document.getElementById('pageTitle').innerText = "AegisAgent | Çoxlu Ajanlı Denetçi";
-        document.getElementById('pageSubtitle').innerText = "Müqavilə Təhlükəsizliyi & Debat Protokolu";
+        if (currentLang === 'en') {
+          document.getElementById('pageTitle').innerText = "AegisAgent | Multi-Agent Contract Auditor";
+          document.getElementById('pageSubtitle').innerText = "Contract Security & Consensus Protocol";
+        } else {
+          document.getElementById('pageTitle').innerText = "AegisAgent | Çoxlu Ajanlı Denetçi";
+          document.getElementById('pageSubtitle').innerText = "Müqavilə Təhlükəsizliyi & Debat Protokolu";
+        }
       } else if (tabId === 'mentor-tab') {
         document.getElementById('tab-mentor').classList.remove('hidden');
-        document.getElementById('pageTitle').innerText = "Açıqlama";
-        document.getElementById('pageSubtitle').innerText = "KOIP Arxitekturası, Rəqabət Üstünlüyü və İqtisadi ROI";
+        if (currentLang === 'en') {
+          document.getElementById('pageTitle').innerText = "Architecture & ROI Overview";
+          document.getElementById('pageSubtitle').innerText = "KOIP Architecture & Economic Impact";
+        } else {
+          document.getElementById('pageTitle').innerText = "Açıqlama";
+          document.getElementById('pageSubtitle').innerText = "KOIP Arxitekturası, Rəqabət Üstünlüyü və İqtisadi ROI";
+        }
       }
     }
 
@@ -1098,56 +1155,53 @@
     }
 
     // Dəqiq 3.2 Saniyəlik AI Re-routing (Saniyə sayğacı görünmür)
-    function triggerKarabakhAI() {
-      if (isKarabakhAnalyzing) return;
-      isKarabakhAnalyzing = true;
-
+    async function triggerKarabakhAI() {
       const btn = document.getElementById('btnKarabakhReroute');
       const spinner = document.getElementById('karabakhSpinner');
       const text = document.getElementById('karabakhBtnText');
       const loadingBox = document.getElementById('karabakhLoadingBox');
-      const progressBar = document.getElementById('karabakhProgressBar');
-      const resBox = document.getElementById('karabakhResults');
-
-      // Təhlil başlayanda köhnə nəticəni gizlət
-      if (resBox) resBox.classList.add('hidden');
+      const results = document.getElementById('karabakhResults');
+      const bar = document.getElementById('karabakhProgressBar');
+      const isFault = document.getElementById('simStatusPill').innerText.includes("Qəza") || document.getElementById('simStatusPill').innerText.includes("Fault");
 
       btn.disabled = true;
       btn.classList.add('opacity-50', 'cursor-not-allowed');
       spinner.classList.remove('hidden');
-      text.innerText = "Təhlil Aparılır...";
+      text.innerText = "Routing Təhlili Aparılır...";
+      results.classList.add('hidden');
       loadingBox.classList.remove('hidden');
-      progressBar.style.width = '0%';
+      bar.style.width = '0%';
+      setTimeout(() => { bar.style.width = '50%'; }, 500);
 
-      let elapsed = 0;
-      const totalDuration = 3200; // 3.2 seconds
-      const intervalMs = 50;
+      try {
+        const res = await fetch('/api/karabakh/telemetry', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ fault_node: isFault ? "Agdam_Node_01" : null })
+        });
+        const data = await res.json();
+        
+        setTimeout(() => {
+          bar.style.width = '100%';
+          setTimeout(() => {
+            loadingBox.classList.add('hidden');
+            results.classList.remove('hidden');
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            spinner.classList.add('hidden');
+            text.innerText = "Yenidən Routing Analizi Et";
 
-      const timer = setInterval(() => {
-        elapsed += intervalMs;
-        const pct = Math.min(100, (elapsed / totalDuration) * 100);
-        progressBar.style.width = `${pct}%`;
-
-        if (elapsed >= totalDuration) {
-          clearInterval(timer);
-          isKarabakhAnalyzing = false;
-          btn.disabled = false;
-          btn.classList.remove('opacity-50', 'cursor-not-allowed');
-          spinner.classList.add('hidden');
-          text.innerText = "Avtonom Yaşıl Enerji & Peyk Re-routing Təhlili";
-          loadingBox.classList.add('hidden');
-
-          // Təhlil bitəndə nəticə blokunu açırıq
-          if (resBox) {
-            resBox.classList.remove('hidden');
-            resBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
-        }
-      }, intervalMs);
+            const pathStr = data.failover_route.path.join(" ➔ ");
+            document.getElementById('kresDetail1').innerText = "Dijkstra Alqoritmi ilə tapılan yol (Oms keçid): " + pathStr;
+            document.getElementById('kresProfit').innerText = "+" + data.brigade_saved_azn + " ₼";
+            
+          }, 400);
+        }, 500);
+      } catch (err) {
+        console.error(err);
+      }
     }
-
-    // ⚡ Qəza / Hadisə Simulyasiyası (Mentor üçün İnteraktiv Şou)
-    let isFaultSimulating = false;
+    
     function triggerNetworkFaultSimulation() {
       if (isFaultSimulating) return;
       isFaultSimulating = true;
@@ -1405,6 +1459,7 @@
       }
       renderCustomerCards();
       selectFirstCustomer();
+      
     }
 
     function setCustomerType(type) {

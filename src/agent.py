@@ -90,7 +90,8 @@ def print_customer_card(customer: dict):
     print(c(f"  │  ID      : {customer['customer_id']}", BLUE) + c(f"  {tier_badge(customer['tier'])}", ""))
     print(c(f"  │  Name    : {customer['name']}", BLUE))
     print(c(f"  │  Product : {customer['product']}", BLUE))
-    print(c(f"  │  LTV     : ", BLUE) + c(f"${customer['lifetime_value_usd']:,}", GREEN, BOLD) +
+    ltv_val = customer.get("lifetime_value_azn", customer.get("lifetime_value_usd", 0))
+    print(c(f"  │  LTV     : ", BLUE) + c(f"{ltv_val:,.0f} ₼", GREEN, BOLD) +
           c(f"   Margin Cap: ", BLUE) + c(f"{customer['margin_limit_percentage']}%", YELLOW, BOLD))
     print(c(f"  └{'─'*55}", BLUE))
     print()
@@ -132,7 +133,7 @@ def print_summary(processed: int, total_ltv: float, start_time: float):
     print(c("═" * 70, GREEN, BOLD))
     print(c("  ✅  RETENTION PIPELINE COMPLETE", GREEN, BOLD))
     print(c(f"  Customers Processed : {processed}", WHITE))
-    print(c(f"  Total Portfolio LTV : ${total_ltv:,.0f}", GREEN, BOLD))
+    print(c(f"  Total Portfolio LTV : {total_ltv:,.0f} ₼", GREEN, BOLD))
     print(c(f"  Elapsed Time        : {elapsed:.2f}s", DIM))
     print(c(f"  Timestamp           : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", DIM))
     print(c("═" * 70, GREEN, BOLD))
@@ -149,11 +150,22 @@ def run_agent():
         sys.exit(1)
 
     with open(data_path, "r", encoding="utf-8") as f:
-        customers = json.load(f)
+        raw_data = json.load(f)
+
+    if isinstance(raw_data, dict):
+        customers = []
+        for cat in ["corporate", "individual"]:
+            customers.extend(raw_data.get(cat, []))
+        if not customers:
+            for v in raw_data.values():
+                if isinstance(v, list):
+                    customers.extend(v)
+    else:
+        customers = raw_data
 
     print(c(f"  Loaded {len(customers)} customer records from {data_path.name}", DIM))
     start_time = time.time()
-    total_ltv = sum(c["lifetime_value_usd"] for c in customers)
+    total_ltv = sum(c.get("lifetime_value_azn", c.get("lifetime_value_usd", 0)) for c in customers)
 
     # ── Process each customer ──
     for i, customer in enumerate(customers, 1):

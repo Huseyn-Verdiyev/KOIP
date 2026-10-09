@@ -25,7 +25,7 @@ def _calculate_safe_offer(customer_data: dict, analysis: dict) -> dict:
         - ltv_usd      : Customer lifetime value
         - priority     : Issue priority from analysis
     """
-    ltv = customer_data["lifetime_value_usd"]
+    ltv = customer_data.get("lifetime_value_azn", customer_data.get("lifetime_value_usd", 0))
     margin_limit = customer_data["margin_limit_percentage"]
     priority = analysis.get("priority", "MEDIUM")
 

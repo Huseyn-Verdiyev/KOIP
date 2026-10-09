@@ -96,11 +96,42 @@ def run_retention(req: RunRequest):
     }
 
 
+from aegis import AegisDebateOrchestrator
+from typing import Optional
+
+
+class AegisRequest(BaseModel):
+    contract_id: Optional[str] = None
+    title: Optional[str] = None
+    monthly_fee: Optional[float] = 4800
+    annual_ltv: Optional[float] = 57600
+    clause_text: Optional[str] = None
+
+
+@app.post("/api/aegis/debate")
+def run_aegis_debate(req: Optional[AegisRequest] = None):
+    """Run AegisAgent 3-agent dialectic consensus debate."""
+    orchestrator = AegisDebateOrchestrator()
+    data = req.dict() if req else None
+    return orchestrator.run_debate(data)
+
+
 @app.post("/api/run-all")
 def run_all():
     """Run retention pipeline for all customers."""
     with open(DATA_PATH, encoding="utf-8") as f:
-        customers = json.load(f)
+        data = json.load(f)
+
+    if isinstance(data, dict):
+        customers = []
+        for cat in ["corporate", "individual"]:
+            customers.extend(data.get(cat, []))
+        if not customers:
+            for v in data.values():
+                if isinstance(v, list):
+                    customers.extend(v)
+    else:
+        customers = data
 
     results = []
     for customer in customers:
@@ -126,3 +157,17 @@ def run_all():
             })
 
     return {"results": results}
+
+from karabakh_routing import run_failover_simulation
+
+class TelemetryRequest(BaseModel):
+    fault_node: Optional[str] = None
+
+@app.post("/api/karabakh/telemetry")
+def get_karabakh_telemetry(req: Optional[TelemetryRequest] = None):
+    """
+    Simulate Karabakh live network routing.
+    If fault_node is provided, injects a fiber cut and computes the failover path via Dijkstra.
+    """
+    fault = req.fault_node if req else None
+    return run_failover_simulation(fault_node=fault)
